@@ -5,4 +5,4 @@ revision = v0.2
 depth = 1
 
 [provide]
-dependency_names = evol, evolmod
+dependency_names = evol
