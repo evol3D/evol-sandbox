@@ -1,7 +1,7 @@
 [wrap-git]
 directory = evol
 url = https://github.com/evol3D/evol
-revision = v0.2
+revision = eventsystem
 depth = 1
 
 [provide]
