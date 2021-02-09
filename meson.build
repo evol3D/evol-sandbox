@@ -2,6 +2,8 @@ project('evol-sandbox', 'c',
   version : '0.1',
   default_options : ['warning_level=3', 'c_std=gnu11'])
 
+add_global_arguments('-fms-extensions', '-DEV_APP_CONFIG="' + meson.current_source_dir() + '/appconfig.meta"', language: 'c')
+
 evol_dep = dependency('evol')
 
 subproject('evmod_glfw')
@@ -20,7 +22,6 @@ exe = executable(
   ],
   install : true,
   include_directories: sandbox_incdir,
-  c_args: ['-fms-extensions']
 )
 
 test('basic', exe)
