@@ -4,7 +4,7 @@ project('evol-sandbox', 'c',
 
 evol_dep = dependency('evol')
 
-# subproject('evmod_glfw')
+subproject('evmod_glfw')
 evmodglfw_dep = dependency('evmod_glfw')
 
 sandbox_incdir = []
