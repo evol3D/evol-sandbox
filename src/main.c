@@ -1,5 +1,3 @@
-#include "evol/common/ev_macros.h"
-#include "evol/core/eventlistener.h"
 #include <evol/evol.h>
 #include <evol/evolmod.h>
 #include <evol/common/ev_log.h>
