@@ -4,6 +4,7 @@ project('evol-sandbox', 'c',
 
 add_global_arguments('-fms-extensions', '-DEV_APP_CONFIG="' + meson.current_source_dir() + '/appconfig.meta"', language: 'c')
 
+evol_subproj = subproject('evol')
 evol_dep = dependency('evol')
 
 subproject('evmod_glfw')
@@ -13,7 +14,21 @@ sandbox_incdir = []
 
 configure_file(input: 'config.lua', output: 'config.lua', copy: true)
 
-exe = executable(
+if build_machine.system() == 'windows'
+    # evol dll needs to be copied for each build
+    evoldllcopy = custom_target(
+        'evolDLLCopy',
+        depends: evol_subproj.get_variable('evol_lib'),
+        output: 'evolDLL',
+        command: ['powershell.exe', meson.current_source_dir() + '/buildscripts/evoldllcopy.ps1', meson.project_build_root()],
+        build_by_default: true,
+    )
+
+    # lua dll only needs to be copied in the environment setup
+    run_command('powershell.exe', meson.current_source_dir() + '/buildscripts/luadllcopy.ps1', meson.project_source_root(), meson.project_build_root())
+endif
+
+sandbox_exe = executable(
   'sandbox',
   'src/main.c',
   dependencies: [
@@ -24,4 +39,4 @@ exe = executable(
   include_directories: sandbox_incdir,
 )
 
-test('basic', exe)
+
