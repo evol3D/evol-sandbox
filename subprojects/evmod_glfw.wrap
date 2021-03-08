@@ -1,7 +1,6 @@
 [wrap-git]
 url = https://github.com/evol3D/evol-mod-glfw.git
-revision = master
-depth = 1
+revision = module_api
 
 [provide]
 dependency_names = evmod_glfw

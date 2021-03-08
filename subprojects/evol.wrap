@@ -1,8 +1,7 @@
 [wrap-git]
 directory = evol
 url = https://github.com/evol3D/evol
-revision = master
-depth = 1
+revision = module_api
 
 [provide]
 dependency_names = evol
