@@ -38,19 +38,14 @@ int main(int argc, char **argv) {
   ACTIVATE_EVENT_LISTENER(keyListener, KeyEvent);
   ACTIVATE_EVENT_LISTENER(mouseMovedListener, MouseMovedEvent);
 
-  FN_PTR window_update = evol_getmodfunc(window_module, EV_STRINGIZE(EV_UPDATE_FN_NAME));
-  assert(window_update);
-
-#define CALL_UPDATE(fn, dt) ((I32(*)(REAL))(fn))(dt)
+  MODULE_NAMESPACE(Window) *Window = evol_getmodnamespace(window_module, "window");
+  EV_BREAK_IF(!Window || !Window.update);
 
   while(true) {
-
-    if(CALL_UPDATE(window_update, 0.0) == 1) {
+    if(Window.update(0.0) == 1) {
       break;
     }
-
     EventSystem.progress();
-
   }
 
   evol_unloadmodule(window_module);
