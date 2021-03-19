@@ -10,6 +10,9 @@ evol_dep = dependency('evol')
 subproject('evmod_glfw')
 evmodglfw_dep = dependency('evmod_glfw')
 
+subproject('evmod_world')
+evmodworld_dep = dependency('evmod_world')
+
 sandbox_incdir = []
 
 configure_file(input: 'config.lua', output: 'config.lua', copy: true)
@@ -34,6 +37,7 @@ sandbox_exe = executable(
   dependencies: [
     evol_dep,
     evmodglfw_dep,
+    evmodworld_dep,
   ],
   install : true,
   include_directories: sandbox_incdir,
