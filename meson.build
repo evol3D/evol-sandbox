@@ -10,8 +10,8 @@ evol_dep = dependency('evol')
 subproject('evmod_glfw')
 evmodglfw_dep = dependency('evmod_glfw')
 
-subproject('evmod_world')
-evmodworld_dep = dependency('evmod_world')
+subproject('evmod_ecs')
+evmodecs_dep = dependency('evmod_ecs')
 
 sandbox_incdir = []
 
@@ -37,7 +37,7 @@ sandbox_exe = executable(
   dependencies: [
     evol_dep,
     evmodglfw_dep,
-    evmodworld_dep,
+    evmodecs_dep,
   ],
   install : true,
   include_directories: sandbox_incdir,
