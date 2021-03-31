@@ -1,0 +1,7 @@
+[wrap-git]
+directory = evmod_physics
+url = https://github.com/evol3D/evol-mod-bullet3.git
+revision = master
+
+[provide]
+dependency_names = evmod_physics

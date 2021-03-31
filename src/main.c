@@ -2,21 +2,24 @@
 #include <evol/common/ev_log.h>
 #include <assert.h>
 
-#define NAMESPACE_MODULE evmod_glfw
-#include <evol/meta/namespace_import.h>
-
 #define TYPE_MODULE evmod_glfw
 #include <evol/meta/type_import.h>
-
 #define TYPE_MODULE evmod_ecs
 #include <evol/meta/type_import.h>
+#define TYPE_MODULE evmod_physics
+#include <evol/meta/type_import.h>
 
+#define NAMESPACE_MODULE evmod_glfw
+#include <evol/meta/namespace_import.h>
 #define NAMESPACE_MODULE evmod_ecs
+#include <evol/meta/namespace_import.h>
+#define NAMESPACE_MODULE evmod_physics
 #include <evol/meta/namespace_import.h>
 
 #define IMPORT_NAMESPACES do {               \
     IMPORT_NAMESPACE(ECS, ecs_module);   \
     IMPORT_NAMESPACE(Window, window_module); \
+    IMPORT_NAMESPACE(Physics, physics_module); \
   } while (0)
 
 typedef struct Cmp1 {
@@ -45,8 +48,9 @@ int main(int argc, char **argv)
   evol_parse_args(engine, argc, argv);
   evol_init(engine);
 
-  evolmodule_t window_module = evol_loadmodule("window"); DEBUG_ASSERT(window_module);
-  evolmodule_t ecs_module = evol_loadmodule("ecs");   DEBUG_ASSERT(ecs_module);
+  evolmodule_t window_module  = evol_loadmodule("window");  DEBUG_ASSERT(window_module);
+  evolmodule_t ecs_module     = evol_loadmodule("ecs");     DEBUG_ASSERT(ecs_module);
+  evolmodule_t physics_module = evol_loadmodule("physics"); DEBUG_ASSERT(physics_module);
 
   IMPORT_NAMESPACES;
 
@@ -72,12 +76,14 @@ int main(int argc, char **argv)
 
   bool result = 0;
   while(true) {
-    result |= Window->update(0.0); 
+    result |= Window->update(0.0);
     result |= ECS->update(0.0);
+    result |= Physics->update(0.0);
 
     if(result) break;
   }
 
+  evol_unloadmodule(physics_module);
   evol_unloadmodule(ecs_module);
   evol_unloadmodule(window_module);
   evol_deinit(engine);
