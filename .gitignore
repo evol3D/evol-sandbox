@@ -5,7 +5,7 @@
 **/.cache/**
 **/.ccls-cache/**
 
-**/.vs/**
+**/.vs*/**
 **/.idea/**
 **/.clangd/**
 
