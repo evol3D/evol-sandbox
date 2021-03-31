@@ -1,6 +1,5 @@
 #include <evol/evol.h>
 #include <evol/common/ev_log.h>
-#include <assert.h>
 
 #define TYPE_MODULE evmod_glfw
 #include <evol/meta/type_import.h>
@@ -16,9 +15,18 @@
 #define NAMESPACE_MODULE evmod_physics
 #include <evol/meta/namespace_import.h>
 
-#define IMPORT_NAMESPACES do {               \
-    IMPORT_NAMESPACE(ECS, ecs_module);   \
-    IMPORT_NAMESPACE(Window, window_module); \
+#define EVENT_MODULE evmod_glfw
+#include <evol/meta/event_include.h>
+
+// Close window when Q is pressed
+DECLARE_EVENT_LISTENER(keyPressedListener, (KeyPressedEvent *event) {
+  if(event->keyCode == 81) // tests if Q was pressed
+    Window->close();
+})
+
+#define IMPORT_NAMESPACES do {                 \
+    IMPORT_NAMESPACE(ECS, ecs_module);         \
+    IMPORT_NAMESPACE(Window, window_module);   \
     IMPORT_NAMESPACE(Physics, physics_module); \
   } while (0)
 
@@ -31,7 +39,7 @@ typedef struct Cmp2 {
   F32 dummy_f32;
 } Component2;
 
-int cmp12(ECSQuery query)
+void TestSystem(ECSQuery query)
 {
   Component1 *cmp1 = ECS->getQueryColumn(query, sizeof(Component1), 1);
   Component2 *cmp2 = ECS->getQueryColumn(query, sizeof(Component2), 2);
@@ -52,7 +60,10 @@ int main(int argc, char **argv)
   evolmodule_t ecs_module     = evol_loadmodule("ecs");     DEBUG_ASSERT(ecs_module);
   evolmodule_t physics_module = evol_loadmodule("physics"); DEBUG_ASSERT(physics_module);
 
-  IMPORT_NAMESPACES;
+  IMPORT_NAMESPACES;  
+  IMPORT_EVENTS_evmod_glfw(window_module);
+
+  ACTIVATE_EVENT_LISTENER(keyPressedListener, KeyPressedEvent);
 
   ECS->newScene();
 
@@ -72,15 +83,14 @@ int main(int argc, char **argv)
   ECS->addComponent(ent2, Cmp1_ID, sizeof(Component1), &c12);
   ECS->addComponent(ent2, Cmp2_ID, sizeof(Component2), &c2);
 
-  ECS->registerSystem("Component1, Component2", EV_ECS_PIPELINE_STAGE_UPDATE, cmp12, "cmp12");
+  ECS->registerSystem("Component1, Component2", EV_ECS_PIPELINE_STAGE_UPDATE, TestSystem, "TestSystem");
 
   bool result = 0;
-  while(true) {
+  while(result == 0) {
+    result |= EventSystem.progress();
     result |= Window->update(0.0);
     result |= ECS->update(0.0);
     result |= Physics->update(0.0);
-
-    if(result) break;
   }
 
   evol_unloadmodule(physics_module);
