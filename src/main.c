@@ -1,27 +1,28 @@
 #include <evol/evol.h>
 #include <evol/common/ev_log.h>
+#include <evol/common/ev_profile.h>
 
 #define TYPE_MODULE evmod_glfw
 #include <evol/meta/type_import.h>
-#define TYPE_MODULE evmod_ecs
-#include <evol/meta/type_import.h>
-#define TYPE_MODULE evmod_physics
-#include <evol/meta/type_import.h>
-
 #define NAMESPACE_MODULE evmod_glfw
 #include <evol/meta/namespace_import.h>
-#define NAMESPACE_MODULE evmod_ecs
-#include <evol/meta/namespace_import.h>
-#define NAMESPACE_MODULE evmod_physics
-#include <evol/meta/namespace_import.h>
-
 #define EVENT_MODULE evmod_glfw
 #include <evol/meta/event_include.h>
+
+#define TYPE_MODULE evmod_ecs
+#include <evol/meta/type_import.h>
+#define NAMESPACE_MODULE evmod_ecs
+#include <evol/meta/namespace_import.h>
+
+#define TYPE_MODULE evmod_physics
+#include <evol/meta/type_import.h>
+#define NAMESPACE_MODULE evmod_physics
+#include <evol/meta/namespace_import.h>
 
 // Close window when Q is pressed
 DECLARE_EVENT_LISTENER(keyPressedListener, (KeyPressedEvent *event) {
   if(event->keyCode == 81) // tests if Q was pressed
-    Window->close();
+    Window->setShouldClose(event->handle, true);
 })
 
 #define IMPORT_NAMESPACES do {                 \
@@ -39,14 +40,16 @@ typedef struct Cmp2 {
   F32 dummy_f32;
 } Component2;
 
-void TestSystem(ECSQuery query)
+void 
+TestSystem(
+  ECSQuery query)
 {
   Component1 *cmp1 = ECS->getQueryColumn(query, sizeof(Component1), 1);
   Component2 *cmp2 = ECS->getQueryColumn(query, sizeof(Component2), 2);
   U32 count = ECS->getQueryMatchCount(query);
 
   for(int i = 1; i <= count; ++i) {
-    ev_log_trace("Iteration #%d, cmp1: {%d}", i, cmp1[i-1].dummy_i32);
+    // ev_log_trace("Iteration #%d, cmp1: {%d}", i, cmp1[i-1].dummy_i32);
   }
 }
 
@@ -62,6 +65,8 @@ int main(int argc, char **argv)
 
   IMPORT_NAMESPACES;  
   IMPORT_EVENTS_evmod_glfw(window_module);
+
+  WindowHandle windowHandle = Window->create(800, 600, "Main Window");
 
   ACTIVATE_EVENT_LISTENER(keyPressedListener, KeyPressedEvent);
 
@@ -85,12 +90,34 @@ int main(int argc, char **argv)
 
   ECS->registerSystem("Component1, Component2", EV_ECS_PIPELINE_STAGE_UPDATE, TestSystem, "TestSystem");
 
-  bool result = 0;
+  CollisionShape boxCollider = Physics->createBoxShape(1., 1., 1.);
+  RigidBodyInfo rbInfo = {
+    .type = EV_RIGIDBODY_DYNAMIC,
+    .collisionShape = boxCollider,
+    .mass = 1.0,
+    .restitution = 1.0
+  };
+  RigidBody box = Physics->createRigidBody(&rbInfo);
+  Physics->setRigidBodyPosition(box, Vec3(0, 10, -10));
+
+  CollisionShape groundCollider = Physics->createBoxShape(5., 5., 5.);
+  RigidBodyInfo groundRbInfo = {
+    .type = EV_RIGIDBODY_STATIC,
+    .collisionShape = groundCollider,
+    .restitution = 1.0
+  };
+  RigidBody ground = Physics->createRigidBody(&groundRbInfo);
+  Physics->setRigidBodyPosition(ground, Vec3(0, -10, -10));
+
+  U32 result = 0;
   while(result == 0) {
+    ev_BeginCPUSample(NewFrame, 0);
     result |= EventSystem.progress();
-    result |= Window->update(0.0);
+    result |= Window->update(windowHandle);
     result |= ECS->update(0.0);
-    result |= Physics->update(0.0);
+    result |= Physics->update(0.017);
+    Sleep(17);
+    ev_EndCPUSample();
   }
 
   evol_unloadmodule(physics_module);
