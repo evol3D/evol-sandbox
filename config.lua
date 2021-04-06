@@ -1,2 +1,2 @@
 name = "sandbox"
-module_directory = "."
+module_dir = "."
