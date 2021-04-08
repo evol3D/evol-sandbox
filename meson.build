@@ -1,46 +1,25 @@
 project('evol-sandbox', 'c',
   version : '0.1',
-  default_options : ['warning_level=3', 'c_std=gnu11'])
-
-add_global_arguments('-fms-extensions', '-DEV_APP_CONFIG="' + meson.current_source_dir() + '/appconfig.meta"', language: 'c')
+  default_options : [
+    'warning_level=3', 
+    'c_std=gnu11',
+  ],
+)
 
 evol_subproj = subproject('evol')
 evol_dep = dependency('evol')
 
+# The subproject's sole purpose is to make sure that the modules build
 subproject('evmod_glfw')
-evmodglfw_dep = dependency('evmod_glfw')
-
 subproject('evmod_ecs')
-evmodecs_dep = dependency('evmod_ecs')
-
 subproject('evmod_physics')
+
+evmodglfw_dep = dependency('evmod_glfw')
+evmodecs_dep = dependency('evmod_ecs')
 evmodphysics_dep = dependency('evmod_physics')
 
-sandbox_incdir = []
-
-configure_file(input: 'config.lua', output: 'config.lua', copy: true)
-
-if build_machine.system() == 'windows'
-    # evol dll needs to be copied for each build
-    evoldllcopy = custom_target(
-        'evolDLLCopy',
-        depends: evol_subproj.get_variable('evol_lib'),
-        output: 'evolDLL',
-        command: ['powershell.exe', meson.current_source_dir() + '/buildscripts/evoldllcopy.ps1', meson.project_build_root()],
-        build_by_default: true,
-    )
-
-    # flecs dll needs to be copied to root builddir
-    flecsdllcopy = custom_target(
-        'flecsDLLCopy',
-        output: 'flecsDLL',
-        command: ['powershell.exe', meson.current_source_dir() + '/buildscripts/flecsdllcopy.ps1', meson.project_build_root()],
-        build_by_default: true,
-    )
-
-    # lua dll only needs to be copied in the environment setup
-    run_command('powershell.exe', meson.current_source_dir() + '/buildscripts/luadllcopy.ps1', meson.project_source_root(), meson.project_build_root())
-endif
+# Setup build directory
+subdir('buildscripts')
 
 sandbox_exe = executable(
   'sandbox',
@@ -52,7 +31,7 @@ sandbox_exe = executable(
     evmodphysics_dep,
   ],
   install : true,
-  include_directories: sandbox_incdir,
 )
 
-
+# Copy config file
+configure_file(input: 'config.lua', output: 'config.lua', copy: true)
