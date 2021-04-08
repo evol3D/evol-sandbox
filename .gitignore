@@ -13,9 +13,19 @@ compile_commands.json
 
 subprojects/*
 !subprojects/packagefiles
+!subprojects/*.wrap
 
 tags
 
 **/.nvimrc
 
 .doxygen
+subprojects/bullet3.wrap
+subprojects/cargs.wrap
+subprojects/cglm.wrap
+subprojects/cute_headers.wrap
+subprojects/flecs.wrap
+subprojects/glfw.wrap
+subprojects/hashmap.wrap
+subprojects/luajit.wrap
+subprojects/remotery.wrap
