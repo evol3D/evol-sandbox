@@ -13,10 +13,12 @@ evol_dep = dependency('evol')
 subproject('evmod_glfw')
 subproject('evmod_ecs')
 subproject('evmod_physics')
+subproject('evmod_script')
 
 evmodglfw_dep = dependency('evmod_glfw')
 evmodecs_dep = dependency('evmod_ecs')
 evmodphysics_dep = dependency('evmod_physics')
+evmodscript_dep = dependency('evmod_script')
 
 # Setup build directory
 subdir('buildscripts')
@@ -26,9 +28,11 @@ sandbox_exe = executable(
   'src/main.c',
   dependencies: [
     evol_dep,
+
     evmodglfw_dep,
     evmodecs_dep,
     evmodphysics_dep,
+    evmodscript_dep,
   ],
   install : true,
 )

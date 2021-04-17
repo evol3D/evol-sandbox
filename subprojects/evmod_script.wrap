@@ -1,0 +1,7 @@
+[wrap-git]
+directory = evmod_script
+url = https://github.com/evol3D/evol-mod-scripting.git
+revision = master
+
+[provide]
+dependency_names = evmod_script
