@@ -1,5 +1,6 @@
 #include <evol/evol.h>
 #include <evol/common/ev_log.h>
+#include <evol/common/ev_macros.h>
 #include <evol/common/ev_profile.h>
 
 #define TYPE_MODULE evmod_glfw
@@ -19,6 +20,11 @@
 #define NAMESPACE_MODULE evmod_physics
 #include <evol/meta/namespace_import.h>
 
+#define TYPE_MODULE evmod_script
+#include <evol/meta/type_import.h>
+#define NAMESPACE_MODULE evmod_script
+#include <evol/meta/namespace_import.h>
+
 // Close window when Q is pressed
 DECLARE_EVENT_LISTENER(keyPressedListener, (KeyPressedEvent *event) {
   if(event->keyCode == 81) // tests if Q was pressed
@@ -29,29 +35,10 @@ DECLARE_EVENT_LISTENER(keyPressedListener, (KeyPressedEvent *event) {
     IMPORT_NAMESPACE(ECS, ecs_module);         \
     IMPORT_NAMESPACE(Window, window_module);   \
     IMPORT_NAMESPACE(Physics, physics_module); \
+    IMPORT_NAMESPACE(Rigidbody, physics_module); \
+    IMPORT_NAMESPACE(CollisionShape, physics_module); \
+    IMPORT_NAMESPACE(Script, script_module);   \
   } while (0)
-
-typedef struct Cmp1 {
-  I32 dummy_i32;
-} Component1;
-
-typedef struct Cmp2 {
-  I16 dummy_i16;
-  F32 dummy_f32;
-} Component2;
-
-void 
-TestSystem(
-  ECSQuery query)
-{
-  Component1 *cmp1 = ECS->getQueryColumn(query, sizeof(Component1), 1);
-  Component2 *cmp2 = ECS->getQueryColumn(query, sizeof(Component2), 2);
-  U32 count = ECS->getQueryMatchCount(query);
-
-  for(int i = 1; i <= count; ++i) {
-    // ev_log_trace("Iteration #%d, cmp1: {%d}", i, cmp1[i-1].dummy_i32);
-  }
-}
 
 int main(int argc, char **argv) 
 {
@@ -59,9 +46,11 @@ int main(int argc, char **argv)
   evol_parse_args(engine, argc, argv);
   evol_init(engine);
 
-  evolmodule_t window_module  = evol_loadmodule("window");  DEBUG_ASSERT(window_module);
+  evolmodule_t script_module  = evol_loadmodule("script");  DEBUG_ASSERT(script_module);
   evolmodule_t ecs_module     = evol_loadmodule("ecs");     DEBUG_ASSERT(ecs_module);
+  evolmodule_t window_module  = evol_loadmodule("window");  DEBUG_ASSERT(window_module);
   evolmodule_t physics_module = evol_loadmodule("physics"); DEBUG_ASSERT(physics_module);
+
 
   IMPORT_NAMESPACES;  
   IMPORT_EVENTS_evmod_glfw(window_module);
@@ -72,57 +61,81 @@ int main(int argc, char **argv)
 
   ECS->newScene();
 
+  Script->initECS();
+  Physics->initECS();
+
   ECSEntityID ent1 = ECS->createEntity();
   ECSEntityID ent2 = ECS->createEntity();
 
-  ECSComponentID Cmp1_ID = ECS->registerComponent("Component1", sizeof(Component1), EV_ALIGNOF(Component1));
-  ECSComponentID Cmp2_ID = ECS->registerComponent("Component2", sizeof(Component2), EV_ALIGNOF(Component2));
+  ScriptHandle ent1ScriptHandle = Script->new("Entity1Script",
+      /* "object.on_update = function ()\n" */
+      /* "  print(C('test_function', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10))\n" */
+      /* "end\n" */
+      /* "object.on_fixedupdate = function()\n" */
+      /* "  print(\"Entity1Script OnFixedUpdate\")\n" */
+      /* "end\n" */
+      ""
+      );
 
-  Component1 c11 = { 555 };
-  Component2 c2 = { 123, 456.789 };
-  Component1 c12 = { 444 };
+  Script->addToEntity(ent1, ent1ScriptHandle);
+  Script->addToEntity(ent2, ent1ScriptHandle);
 
-  ECS->addComponent(ent1, Cmp1_ID, sizeof(Component1), &c11);
-  ECS->addComponent(ent1, Cmp2_ID, sizeof(Component2), &c2);
+  CollisionShapeHandle boxCollider = CollisionShape->newBox(Vec3new(1., 1., 1.));
+  CollisionShapeHandle groundCollider = CollisionShape->newBox(Vec3new(5., 5., 5.));
 
-  ECS->addComponent(ent2, Cmp1_ID, sizeof(Component1), &c12);
-  ECS->addComponent(ent2, Cmp2_ID, sizeof(Component2), &c2);
-
-  ECS->registerSystem("Component1, Component2", EV_ECS_PIPELINE_STAGE_UPDATE, TestSystem, "TestSystem");
-
-  CollisionShape boxCollider = Physics->createBoxShape(1., 1., 1.);
-  RigidBodyInfo rbInfo = {
+  RigidbodyInfo rbInfo = {
     .type = EV_RIGIDBODY_DYNAMIC,
     .collisionShape = boxCollider,
     .mass = 1.0,
     .restitution = 1.0
   };
-  RigidBody box = Physics->createRigidBody(&rbInfo);
-  Physics->setRigidBodyPosition(box, Vec3(0, 10, -10));
 
-  CollisionShape groundCollider = Physics->createBoxShape(5., 5., 5.);
-  RigidBodyInfo groundRbInfo = {
+  RigidbodyHandle box = Rigidbody->new(&rbInfo);
+  Rigidbody->setPosition(box, Vec3new(0, 10, -10));
+  Rigidbody->addToEntity(ent1, box);
+  Rigidbody->addForce(box, Vec3new(10.0, 0.0, 0.0));
+
+  RigidbodyInfo groundRbInfo = {
     .type = EV_RIGIDBODY_STATIC,
     .collisionShape = groundCollider,
     .restitution = 1.0
   };
-  RigidBody ground = Physics->createRigidBody(&groundRbInfo);
-  Physics->setRigidBodyPosition(ground, Vec3(0, -10, -10));
+  RigidbodyHandle ground = Rigidbody->new(&groundRbInfo);
+  Rigidbody->setPosition(ground, Vec3new(0, -10, -10));
+  Rigidbody->addToEntity(ent2, ground);
+
+  rmt_SetCurrentThreadName("Main Thread");
 
   U32 result = 0;
   while(result == 0) {
-    ev_BeginCPUSample(NewFrame, 0);
-    result |= EventSystem.progress();
-    result |= Window->update(windowHandle);
-    result |= ECS->update(0.0);
-    result |= Physics->update(0.017);
+    ev_ProfileCPU(EventSystemProgress, 0) {
+      result |= EventSystem.progress();
+    }
+
+    ev_ProfileCPU(WindowUpdate, 0) {
+      result |= Window->update(windowHandle);
+    }
+
+    ev_ProfileCPU(PhysicsUpdate, 0) {
+      result |= Physics->update(0.017);
+    }
+
+    ev_ProfileCPU(ECSUpdate, 0) {
+      result |= ECS->update(0);
+    }
+
+    // Remove the following section
+    RigidbodyHandle testHandle = Rigidbody->getFromEntity(ent1);
+    Vec3 pos = Rigidbody->getPosition(testHandle);
+    printf("Current position of Entity1 = (%f, %f, %f)\n", pos.x, pos.y, pos.z);
+
     Sleep(17);
-    ev_EndCPUSample();
   }
 
   evol_unloadmodule(physics_module);
-  evol_unloadmodule(ecs_module);
   evol_unloadmodule(window_module);
+  evol_unloadmodule(ecs_module);
+  evol_unloadmodule(script_module);
   evol_deinit(engine);
   evol_destroy(engine);
   return 0;
