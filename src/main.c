@@ -68,17 +68,21 @@ int main(int argc, char **argv)
   ECSEntityID ent2 = ECS->createEntity();
 
   ScriptHandle ent1ScriptHandle = Script->new("Entity1Script",
-      /* "object.on_update = function ()\n" */
-      /* "  print(C('test_function', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10))\n" */
-      /* "end\n" */
-      /* "object.on_fixedupdate = function()\n" */
-      /* "  print(\"Entity1Script OnFixedUpdate\")\n" */
-      /* "end\n" */
-      ""
-      );
+    "this.on_update = function ()\n"
+    "  rb = this:getComponent(Rigidbody)\n"
+    "  rb:addForce(Vec3:new(2, 0, 0))\n"
+    "end"
+  );
+
+  ScriptHandle ent2ScriptHandle = Script->new("Entity2Script",
+    "this.on_update = function ()\n"
+    "  rb = this:getComponent(Rigidbody)\n"
+    "  rb:addForce(Vec3:new(-2, 0, 0))\n"
+    "end"
+  );
 
   Script->addToEntity(ent1, ent1ScriptHandle);
-  Script->addToEntity(ent2, ent1ScriptHandle);
+  Script->addToEntity(ent2, ent2ScriptHandle);
 
   CollisionShapeHandle boxCollider = CollisionShape->newBox(Vec3new(1., 1., 1.));
   CollisionShapeHandle groundCollider = CollisionShape->newBox(Vec3new(5., 5., 5.));
@@ -91,9 +95,12 @@ int main(int argc, char **argv)
   };
 
   RigidbodyHandle box = Rigidbody->new(&rbInfo);
-  Rigidbody->setPosition(box, Vec3new(0, 10, -10));
+  Rigidbody->setPosition(box, Vec3new(1, 5, -10));
   Rigidbody->addToEntity(ent1, box);
-  Rigidbody->addForce(box, Vec3new(10.0, 0.0, 0.0));
+
+  RigidbodyHandle box2 = Rigidbody->new(&rbInfo);
+  Rigidbody->setPosition(box2, Vec3new(-1, 5, -10));
+  Rigidbody->addToEntity(ent2, box2);
 
   RigidbodyInfo groundRbInfo = {
     .type = EV_RIGIDBODY_STATIC,
@@ -102,7 +109,6 @@ int main(int argc, char **argv)
   };
   RigidbodyHandle ground = Rigidbody->new(&groundRbInfo);
   Rigidbody->setPosition(ground, Vec3new(0, -10, -10));
-  Rigidbody->addToEntity(ent2, ground);
 
   rmt_SetCurrentThreadName("Main Thread");
 
