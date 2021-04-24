@@ -135,7 +135,6 @@ int main(int argc, char **argv)
     Vec3 pos = Rigidbody->getPosition(testHandle);
     printf("Current position of Entity1 = (%f, %f, %f)\n", pos.x, pos.y, pos.z);
 
-    Sleep(17);
   }
 
   evol_unloadmodule(physics_module);
