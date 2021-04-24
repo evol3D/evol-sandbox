@@ -2,6 +2,7 @@
 #include <evol/common/ev_log.h>
 #include <evol/common/ev_macros.h>
 #include <evol/common/ev_profile.h>
+#include <evol/utils/sleep.h>
 
 #define TYPE_MODULE evmod_glfw
 #include <evol/meta/type_import.h>
@@ -52,7 +53,7 @@ int main(int argc, char **argv)
   evolmodule_t physics_module = evol_loadmodule("physics"); DEBUG_ASSERT(physics_module);
 
 
-  IMPORT_NAMESPACES;  
+  IMPORT_NAMESPACES;
   IMPORT_EVENTS_evmod_glfw(window_module);
 
   WindowHandle windowHandle = Window->create(800, 600, "Main Window");
@@ -135,6 +136,7 @@ int main(int argc, char **argv)
     Vec3 pos = Rigidbody->getPosition(testHandle);
     printf("Current position of Entity1 = (%f, %f, %f)\n", pos.x, pos.y, pos.z);
 
+    sleep_ms(17);
   }
 
   evol_unloadmodule(physics_module);
