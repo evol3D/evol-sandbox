@@ -9,6 +9,15 @@ project('evol-sandbox', 'c',
 evol_subproj = subproject('evol')
 evol_dep = dependency('evol')
 
+sandbox_args = []
+
+cc = meson.get_compiler('c')
+compiler_name = cc.get_id()
+if compiler_name == 'gcc'
+  sandbox_args += '-fms-extensions'
+endif
+
+
 # The subproject's sole purpose is to make sure that the modules build
 subproject('evmod_glfw')
 subproject('evmod_ecs')
@@ -35,6 +44,7 @@ sandbox_exe = executable(
     evmodscript_dep,
   ],
   install : true,
+  c_args: sandbox_args,
 )
 
 # Copy config file
