@@ -148,7 +148,7 @@ int main(int argc, char **argv)
   }
 
   evol_unloadmodule(physics_module);
-  evol_unloadmodule(ecs_module);
+  evol_unloadmodule(asset_module);
   evol_unloadmodule(window_module);
   evol_unloadmodule(ecs_module);
   evol_unloadmodule(script_module);
