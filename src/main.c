@@ -35,6 +35,7 @@ DECLARE_EVENT_LISTENER(keyPressedListener, (KeyPressedEvent *event) {
 #define IMPORT_NAMESPACES do {                 \
     IMPORT_NAMESPACE(ECS, ecs_module);         \
     IMPORT_NAMESPACE(Window, window_module);   \
+    IMPORT_NAMESPACE(Input, input_module);   \
     IMPORT_NAMESPACE(Physics, physics_module); \
     IMPORT_NAMESPACE(Rigidbody, physics_module); \
     IMPORT_NAMESPACE(CollisionShape, physics_module); \
@@ -50,6 +51,7 @@ int main(int argc, char **argv)
   evolmodule_t script_module  = evol_loadmodule("script");  DEBUG_ASSERT(script_module);
   evolmodule_t ecs_module     = evol_loadmodule("ecs");     DEBUG_ASSERT(ecs_module);
   evolmodule_t window_module  = evol_loadmodule("window");  DEBUG_ASSERT(window_module);
+  evolmodule_t input_module   = evol_loadmodule("input");   DEBUG_ASSERT(input_module);
   evolmodule_t physics_module = evol_loadmodule("physics"); DEBUG_ASSERT(physics_module);
 
 
@@ -57,6 +59,7 @@ int main(int argc, char **argv)
   IMPORT_EVENTS_evmod_glfw(window_module);
 
   WindowHandle windowHandle = Window->create(800, 600, "Main Window");
+  Input->setActiveWindow(windowHandle);
 
   ACTIVATE_EVENT_LISTENER(keyPressedListener, KeyPressedEvent);
 
@@ -69,16 +72,31 @@ int main(int argc, char **argv)
   ECSEntityID ent2 = ECS->createEntity();
 
   ScriptHandle ent1ScriptHandle = Script->new("Entity1Script",
-    "this.on_update = function ()\n"
-    "  rb = this:getComponent(Rigidbody)\n"
-    "  rb:addForce(Vec3:new(2, 0, 0))\n"
-    "end"
+    /* "this.on_update = function ()\n" */
+    /* "  rb = this:getComponent(Rigidbody)\n" */
+    /* "  rb:addForce(Vec3:new(2, 0, 0))\n" */
+    /* "end" */
+      ""
   );
 
   ScriptHandle ent2ScriptHandle = Script->new("Entity2Script",
     "this.on_update = function ()\n"
     "  rb = this:getComponent(Rigidbody)\n"
-    "  rb:addForce(Vec3:new(-2, 0, 0))\n"
+    "  if Input.getKeyDown(Input.KeyCode.Space) then\n"
+    "    rb:addForce(Vec3:new(0, 100, 0))\n"
+    "  end\n"
+    "  if Input.getKeyDown(Input.KeyCode.D) then\n"
+    "    rb:addForce(Vec3:new(10, 0, 0))\n"
+    "  end\n"
+    "  if Input.getKeyDown(Input.KeyCode.A) then\n"
+    "    rb:addForce(Vec3:new(-10, 0, 0))\n"
+    "  end\n"
+    "  if Input.getKeyDown(Input.KeyCode.W) then\n"
+    "    rb:addForce(Vec3:new(0, 0, -10))\n"
+    "  end\n"
+    "  if Input.getKeyDown(Input.KeyCode.S) then\n"
+    "    rb:addForce(Vec3:new(0, 0, 10))\n"
+    "  end\n"
     "end"
   );
 
@@ -92,7 +110,7 @@ int main(int argc, char **argv)
     .type = EV_RIGIDBODY_DYNAMIC,
     .collisionShape = boxCollider,
     .mass = 1.0,
-    .restitution = 1.0
+    .restitution = 0.0
   };
 
   RigidbodyHandle box = Rigidbody->new(&rbInfo);
@@ -106,7 +124,7 @@ int main(int argc, char **argv)
   RigidbodyInfo groundRbInfo = {
     .type = EV_RIGIDBODY_STATIC,
     .collisionShape = groundCollider,
-    .restitution = 1.0
+    .restitution = 0.0
   };
   RigidbodyHandle ground = Rigidbody->new(&groundRbInfo);
   Rigidbody->setPosition(ground, Vec3new(0, -10, -10));
@@ -132,14 +150,15 @@ int main(int argc, char **argv)
     }
 
     // Remove the following section
-    RigidbodyHandle testHandle = Rigidbody->getFromEntity(ent1);
-    Vec3 pos = Rigidbody->getPosition(testHandle);
-    printf("Current position of Entity1 = (%f, %f, %f)\n", pos.x, pos.y, pos.z);
+    /* RigidbodyHandle testHandle = Rigidbody->getFromEntity(ent1); */
+    /* Vec3 pos = Rigidbody->getPosition(testHandle); */
+    /* printf("Current position of Entity1 = (%f, %f, %f)\n", pos.x, pos.y, pos.z); */
 
     sleep_ms(17);
   }
 
   evol_unloadmodule(physics_module);
+  evol_unloadmodule(input_module);
   evol_unloadmodule(window_module);
   evol_unloadmodule(ecs_module);
   evol_unloadmodule(script_module);
