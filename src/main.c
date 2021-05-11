@@ -26,6 +26,11 @@
 #define NAMESPACE_MODULE evmod_script
 #include <evol/meta/namespace_import.h>
 
+#define TYPE_MODULE evmod_assetsystem
+#include <evol/meta/type_import.h>
+#define NAMESPACE_MODULE evmod_assetsystem
+#include <evol/meta/namespace_import.h>
+
 // Close window when Q is pressed
 DECLARE_EVENT_LISTENER(keyPressedListener, (KeyPressedEvent *event) {
   if(event->keyCode == 81) // tests if Q was pressed
@@ -39,6 +44,7 @@ DECLARE_EVENT_LISTENER(keyPressedListener, (KeyPressedEvent *event) {
     IMPORT_NAMESPACE(Rigidbody, physics_module); \
     IMPORT_NAMESPACE(CollisionShape, physics_module); \
     IMPORT_NAMESPACE(Script, script_module);   \
+    IMPORT_NAMESPACE(AssetSystem, asset_module); \
   } while (0)
 
 int main(int argc, char **argv) 
@@ -51,7 +57,7 @@ int main(int argc, char **argv)
   evolmodule_t ecs_module     = evol_loadmodule("ecs");     DEBUG_ASSERT(ecs_module);
   evolmodule_t window_module  = evol_loadmodule("window");  DEBUG_ASSERT(window_module);
   evolmodule_t physics_module = evol_loadmodule("physics"); DEBUG_ASSERT(physics_module);
-
+  evolmodule_t asset_module   = evol_loadmodule("asset-importer"); DEBUG_ASSERT(asset_module);
 
   IMPORT_NAMESPACES;
   IMPORT_EVENTS_evmod_glfw(window_module);
@@ -113,6 +119,8 @@ int main(int argc, char **argv)
 
   rmt_SetCurrentThreadName("Main Thread");
 
+  AssetSystem->load_mesh("MESH_0_ToyCar.mesh");
+
   U32 result = 0;
   while(result == 0) {
     ev_ProfileCPU(EventSystemProgress, 0) {
@@ -140,6 +148,7 @@ int main(int argc, char **argv)
   }
 
   evol_unloadmodule(physics_module);
+  evol_unloadmodule(ecs_module);
   evol_unloadmodule(window_module);
   evol_unloadmodule(ecs_module);
   evol_unloadmodule(script_module);
