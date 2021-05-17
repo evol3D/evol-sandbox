@@ -65,31 +65,52 @@ int main(int argc, char **argv)
   Game->initECS();
 
   ECSEntityID playerBox = ECS->createEntity();
-  ECSEntityID childBox = ECS->createChild(playerBox);
+  ECSEntityID childBox = ECS->createEntity();
+
+  ECS->addChild(playerBox, childBox);
 
   ECSEntityID ground = ECS->createEntity();
 
+  ScriptHandle childBoxScript = Script->new("Entity1Script", 
+    "this.on_init = function ()                           "
+    "  this.custom_eulerangles = Vec3:new()               "
+    "  this.custom_angularvelocity = Vec3:new(0, 0.01, 0) "
+    "end                                                  "
+    "                                                     "
+    "this.on_fixedupdate = function ()                    "
+    "  if Input.getKeyDown(Input.KeyCode.Left) then       "
+    "    this.custom_eulerangles:add(Vec3:new(0,0.01,0))  "
+    "  end                                                "
+    "  if Input.getKeyDown(Input.KeyCode.Right) then      "
+    "    this.custom_eulerangles:sub(Vec3:new(0,0.01,0))  "
+    "  end                                                "
+    "  this.eulerAngles = this.custom_eulerangles         "
+    "end                                                  "
+  );
 
-  ScriptHandle childBoxScript = Script->new("Entity1Script", "");
   ScriptHandle playerBoxScript = Script->new("Entity2Script",
-    "this.on_update = function ()                                           \n"
-    "  rb = this:getComponent(Rigidbody)                                    \n"
-    "  if Input.getKeyDown(Input.KeyCode.Space) then                        \n"
-    "    this.position = Vec3:new(-1, 5, -10)                               \n"
-    "  end                                                                  \n"
-    "  if Input.getKeyDown(Input.KeyCode.D) then                            \n"
-    "    rb:addForce(Vec3:new(10, 0, 0))                                    \n"
-    "  end                                                                  \n"
-    "  if Input.getKeyDown(Input.KeyCode.A) then                            \n"
-    "    rb:addForce(Vec3:new(-10, 0, 0))                                   \n"
-    "  end                                                                  \n"
-    "  if Input.getKeyDown(Input.KeyCode.W) then                            \n"
-    "    rb:addForce(Vec3:new(0, 0, -10))                                   \n"
-    "  end                                                                  \n"
-    "  if Input.getKeyDown(Input.KeyCode.S) then                            \n"
-    "    rb:addForce(Vec3:new(0, 0, 10))                                    \n"
-    "  end                                                                  \n"
-    "end                                                                    \n"
+    "this.on_collisionenter = function(other)                "
+    "  other.position = other.position + Vec3:new(0.2, 0, 0) "
+    "end                                                     "
+    "                                                        "
+    "this.on_update = function ()                            "
+    "  rb = this:getComponent(Rigidbody)                     "
+    "  if Input.getKeyDown(Input.KeyCode.Space) then         "
+    "    rb:addForce(Vec3:new(0, 100, 0))                    "
+    "  end                                                   "
+    "  if Input.getKeyDown(Input.KeyCode.D) then             "
+    "    rb:addForce(Vec3:new(10, 0, 0))                     "
+    "  end                                                   "
+    "  if Input.getKeyDown(Input.KeyCode.A) then             "
+    "    rb:addForce(Vec3:new(-10, 0, 0))                    "
+    "  end                                                   "
+    "  if Input.getKeyDown(Input.KeyCode.W) then             "
+    "    rb:addForce(Vec3:new(0, 0, -10))                    "
+    "  end                                                   "
+    "  if Input.getKeyDown(Input.KeyCode.S) then             "
+    "    rb:addForce(Vec3:new(0, 0, 10))                     "
+    "  end                                                   "
+    "end                                                     "
   );
 
   Script->addToEntity(playerBox, playerBoxScript);
@@ -157,9 +178,9 @@ int main(int argc, char **argv)
   evol_unloadmodule(physics_module);
   evol_unloadmodule(input_module);
   evol_unloadmodule(asset_module);
-  evol_unloadmodule(window_module);
   evol_unloadmodule(ecs_module);
   evol_unloadmodule(script_module);
+  evol_unloadmodule(window_module);
   evol_deinit(engine);
   evol_destroy(engine);
   return 0;
