@@ -34,6 +34,7 @@ DECLARE_EVENT_LISTENER(keyPressedListener, (KeyPressedEvent *event) {
     IMPORT_NAMESPACE(AssetSystem   , asset_module); \
     IMPORT_NAMESPACE(Game          , game_module); \
     IMPORT_NAMESPACE(Object        , game_module); \
+    IMPORT_NAMESPACE(Camera        , game_module); \
   } while (0)
 
 int main(int argc, char **argv) 
@@ -53,7 +54,9 @@ int main(int argc, char **argv)
   IMPORT_NAMESPACES;
   IMPORT_EVENTS_evmod_glfw(window_module);
 
-  WindowHandle windowHandle = Window->create(800, 600, "Main Window");
+  U32 width = 800;
+  U32 height = 600;
+  WindowHandle windowHandle = Window->create(width, height, "Main Window");
   Input->setActiveWindow(windowHandle);
 
   ACTIVATE_EVENT_LISTENER(keyPressedListener, KeyPressedEvent);
@@ -66,6 +69,16 @@ int main(int argc, char **argv)
 
   ECSEntityID playerBox = ECS->createEntity();
   ECSEntityID childBox = ECS->createEntity();
+
+  ObjectID camera = Camera->create(EV_CAMERA_VIEWTYPE_PERSPECTIVE);
+  assert(Camera->getActive() == camera);
+  Camera->setHFOV(camera, 120);
+  Camera->setNearPlane(camera, 0.001);
+  Camera->setFarPlane(camera, 1000);
+  Camera->setAspectRatio(camera, (F32)width / (F32)height);
+  Object->setPosition(camera, Vec3new(0, 0, -5));
+  Object->setRotation(camera, Vec4new(0, 0, 0, 1));
+  Object->setScale(camera, Vec3new(1, 1, 1));
 
   ECS->addChild(playerBox, childBox);
 
@@ -113,8 +126,31 @@ int main(int argc, char **argv)
     "end                                                     "
   );
 
+  ScriptHandle cameraScript = Script->new("CameraScript",
+    "this.on_init = function()                                          "
+    "  this.speed = 3                                                   "
+    "end                                                                "
+
+    "this.on_fixedupdate = function()                                   "
+    "  if Input.getKeyDown(Input.KeyCode.Up) then                       "
+    "    this.position = this.position + Vec3:new(0, 1, 0) * this.speed "
+    "  end                                                              "
+    "  if Input.getKeyDown(Input.KeyCode.Down) then                     "
+    "    this.position = this.position - Vec3:new(0, 1, 0) * this.speed "
+    "  end                                                              "
+    "  if Input.getKeyDown(Input.KeyCode.Right) then                    "
+    "    this.position = this.position + Vec3:new(1, 0, 0) * this.speed "
+    "  end                                                              "
+    "  if Input.getKeyDown(Input.KeyCode.Left) then                     "
+    "    this.position = this.position - Vec3:new(1, 0, 0) * this.speed "
+    "  end                                                              "
+    "end                                                                "
+  );
+
   Script->addToEntity(playerBox, playerBoxScript);
   Script->addToEntity(childBox, childBoxScript);
+
+  Script->addToEntity(camera, cameraScript);
 
   CollisionShapeHandle boxCollider = CollisionShape->newBox(Vec3new(1., 1., 1.));
   CollisionShapeHandle groundCollider = CollisionShape->newBox(Vec3new(5., 5., 5.));
