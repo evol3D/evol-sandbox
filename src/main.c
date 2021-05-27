@@ -6,8 +6,6 @@
 
 #define IMPORT_MODULE evmod_glfw
 #include IMPORT_MODULE_H
-#define IMPORT_MODULE evmod_ecs
-#include IMPORT_MODULE_H
 #define IMPORT_MODULE evmod_physics
 #include IMPORT_MODULE_H
 #define IMPORT_MODULE evmod_script
@@ -17,25 +15,265 @@
 #define IMPORT_MODULE evmod_game
 #include IMPORT_MODULE_H
 
+GameScene scenes[2];
+
+U32 width = 800;
+U32 height = 600;
+
 // Close window when Q is pressed
 DECLARE_EVENT_LISTENER(keyPressedListener, (KeyPressedEvent *event) {
   if(event->keyCode == 81) // tests if Q was pressed
     Window->setShouldClose(event->handle, true);
+
+  else if(event->keyCode == 49) // Numrow 1
+    Game->setActiveScene(scenes[0]);
+  else if(event->keyCode == 50) // Numrow 2
+    Game->setActiveScene(scenes[1]);
+
+  /* else if(event->keyCode == 45) // Numrow - */
+  /* else if(event->keyCode == 61) // Numrow = */
 })
 
-#define IMPORT_NAMESPACES do {                 \
-    IMPORT_NAMESPACE(ECS           , ecs_module);         \
-    IMPORT_NAMESPACE(Window        , window_module);   \
-    IMPORT_NAMESPACE(Input         , input_module);   \
-    IMPORT_NAMESPACE(Physics       , physics_module); \
-    IMPORT_NAMESPACE(Rigidbody     , physics_module); \
-    IMPORT_NAMESPACE(CollisionShape, physics_module); \
-    IMPORT_NAMESPACE(Script        , script_module);   \
-    IMPORT_NAMESPACE(AssetSystem   , asset_module); \
-    IMPORT_NAMESPACE(Game          , game_module); \
-    IMPORT_NAMESPACE(Object        , game_module); \
-    IMPORT_NAMESPACE(Camera        , game_module); \
-  } while (0)
+void
+init_scenes()
+{
+  { // Scene 0
+    scenes[0] = Game->newScene();
+
+    GameObject playerBox = Scene->createObject(scenes[0]);
+    GameObject childBox = Scene->createChildObject(scenes[0], playerBox);
+    GameObject ground = Scene->createObject(scenes[0]);
+
+    GameObject camera = Scene->createCamera(scenes[0], EV_CAMERA_VIEWTYPE_PERSPECTIVE);
+
+    assert(Scene->getActiveCamera(scenes[0]) == camera);
+    Camera->setHFOV(scenes[0], camera, 120);
+    Camera->setNearPlane(scenes[0], camera, 0.001);
+    Camera->setFarPlane(scenes[0], camera, 1000);
+    Camera->setAspectRatio(scenes[0], camera, (F32)width / (F32)height);
+    Object->setPosition(scenes[0], camera, Vec3new(0, 0, -5));
+
+    ScriptHandle childBoxScript = Script->new("Entity1Script1", 
+      "this.on_init = function ()                           "
+      "  this.custom_eulerangles = Vec3:new()               "
+      "  this.custom_angularvelocity = Vec3:new(0, 0.01, 0) "
+      "end                                                  "
+      "                                                     "
+      "this.on_fixedupdate = function ()                    "
+      "  if Input.getKeyDown(Input.KeyCode.Left) then       "
+      "    this.custom_eulerangles:add(Vec3:new(0,0.01,0))  "
+      "  end                                                "
+      "  if Input.getKeyDown(Input.KeyCode.Right) then      "
+      "    this.custom_eulerangles:sub(Vec3:new(0,0.01,0))  "
+      "  end                                                "
+      "  this.eulerAngles = this.custom_eulerangles         "
+      "end                                                  "
+    );
+
+    ScriptHandle playerBoxScript = Script->new("Entity2Script1",
+      "this.on_collisionenter = function(other)                "
+      "  other.position = other.position + Vec3:new(0.2, 0, 0) "
+      "end                                                     "
+      "                                                        "
+      "this.on_update = function ()                            "
+      "  rb = this:getComponent(Rigidbody)                     "
+      "  if Input.getKeyDown(Input.KeyCode.Space) then         "
+      "    rb:addForce(Vec3:new(0, 100, 0))                    "
+      "  end                                                   "
+      "  if Input.getKeyDown(Input.KeyCode.D) then             "
+      "    rb:addForce(Vec3:new(10, 0, 0))                     "
+      "  end                                                   "
+      "  if Input.getKeyDown(Input.KeyCode.A) then             "
+      "    rb:addForce(Vec3:new(-10, 0, 0))                    "
+      "  end                                                   "
+      "  if Input.getKeyDown(Input.KeyCode.W) then             "
+      "    rb:addForce(Vec3:new(0, 0, -10))                    "
+      "  end                                                   "
+      "  if Input.getKeyDown(Input.KeyCode.S) then             "
+      "    rb:addForce(Vec3:new(0, 0, 10))                     "
+      "  end                                                   "
+      "end                                                     "
+    );
+
+    ScriptHandle cameraScript = Script->new("CameraScript1",
+      "this.on_init = function()                                          "
+      "  this.speed = 3                                                   "
+      "end                                                                "
+
+      "this.on_fixedupdate = function()                                   "
+      /* "  if Input.getKeyDown(Input.KeyCode.Up) then                       " */
+      /* "    this.position = this.position + Vec3:new(0, 1, 0) * this.speed " */
+      /* "  end                                                              " */
+      /* "  if Input.getKeyDown(Input.KeyCode.Down) then                     " */
+      /* "    this.position = this.position - Vec3:new(0, 1, 0) * this.speed " */
+      /* "  end                                                              " */
+      /* "  if Input.getKeyDown(Input.KeyCode.Right) then                    " */
+      /* "    this.position = this.position + Vec3:new(1, 0, 0) * this.speed " */
+      /* "  end                                                              " */
+      /* "  if Input.getKeyDown(Input.KeyCode.Left) then                     " */
+      /* "    this.position = this.position - Vec3:new(1, 0, 0) * this.speed " */
+      /* "  end                                                              " */
+      "end                                                                "
+    );
+
+    GenericHandle ecs_handle = Scene->getECSWorld(scenes[0]);
+    PhysicsWorldHandle physics_handle = Scene->getPhysicsWorld(scenes[0]);
+
+    Script->addToEntity(ecs_handle, playerBox, playerBoxScript);
+    Script->addToEntity(ecs_handle, childBox, childBoxScript);
+    Script->addToEntity(ecs_handle, camera, cameraScript);
+
+    CollisionShapeHandle boxCollider = CollisionShape->newBox(physics_handle, Vec3new(1., 1., 1.));
+    CollisionShapeHandle groundCollider = CollisionShape->newBox(physics_handle, Vec3new(5., 5., 5.));
+
+    Object->setPosition(scenes[0], childBox, Vec3new(1, 7, -10   ));
+    Object->setPosition(scenes[0], playerBox, Vec3new(-1, 5, -10   ));
+    Object->setPosition(scenes[0], ground, Vec3new(0, -10, -10   ));
+
+
+    RigidbodyHandle childRigidbody = Rigidbody->addToEntity(physics_handle, childBox, &(RigidbodyInfo) {
+      .type = EV_RIGIDBODY_KINEMATIC,
+      .collisionShape = boxCollider,
+      .ecs_world = ecs_handle,
+      .gameScene = scenes[0]
+    });
+
+    RigidbodyHandle playerRigidbody = Rigidbody->addToEntity(physics_handle, playerBox, &(RigidbodyInfo) {
+      .type = EV_RIGIDBODY_DYNAMIC,
+      .collisionShape = boxCollider,
+      .mass = 1.0,
+      .ecs_world = ecs_handle,
+      .gameScene = scenes[0]
+    });
+
+    RigidbodyInfo groundRbInfo = {
+      .type = EV_RIGIDBODY_STATIC,
+      .collisionShape = groundCollider,
+      .ecs_world = ecs_handle,
+      .gameScene = scenes[0]
+    };
+
+    RigidbodyHandle groundRigidbody = Rigidbody->addToEntity(physics_handle, ground, &groundRbInfo);
+  }
+  { // Scene 1
+    scenes[1] = Game->newScene();
+
+    GameObject playerBox = Scene->createObject(scenes[1]);
+    GameObject childBox = Scene->createChildObject(scenes[1], playerBox);
+    GameObject ground = Scene->createObject(scenes[1]);
+
+    GameObject camera = Scene->createCamera(scenes[1], EV_CAMERA_VIEWTYPE_PERSPECTIVE);
+
+    assert(Scene->getActiveCamera(scenes[1]) == camera);
+    Camera->setHFOV(scenes[1], camera, 120);
+    Camera->setNearPlane(scenes[1], camera, 0.001);
+    Camera->setFarPlane(scenes[1], camera, 1000);
+    Camera->setAspectRatio(scenes[1], camera, (F32)width / (F32)height);
+    Object->setPosition(scenes[1], camera, Vec3new(0, 0, -5));
+
+    ScriptHandle childBoxScript = Script->new("Entity1Script2", 
+      "this.on_init = function ()                           "
+      "  this.custom_eulerangles = Vec3:new()               "
+      "  this.custom_angularvelocity = Vec3:new(0, 0.01, 0) "
+      "end                                                  "
+      "                                                     "
+      "this.on_fixedupdate = function ()                    "
+      /* "  if Input.getKeyDown(Input.KeyCode.Left) then       " */
+      /* "    this.custom_eulerangles:add(Vec3:new(0,0.01,0))  " */
+      /* "  end                                                " */
+      /* "  if Input.getKeyDown(Input.KeyCode.Right) then      " */
+      /* "    this.custom_eulerangles:sub(Vec3:new(0,0.01,0))  " */
+      /* "  end                                                " */
+      /* "  this.eulerAngles = this.custom_eulerangles         " */
+      "end                                                  "
+    );
+
+    ScriptHandle playerBoxScript = Script->new("Entity2Script2",
+      "this.on_collisionenter = function(other)                "
+      "  other.position = other.position + Vec3:new(0.2, 0, 0) "
+      "end                                                     "
+      "                                                        "
+      "this.on_update = function ()                            "
+      /* "  rb = this:getComponent(Rigidbody)                     " */
+      /* "  if Input.getKeyDown(Input.KeyCode.Space) then         " */
+      /* "    rb:addForce(Vec3:new(0, 100, 0))                    " */
+      /* "  end                                                   " */
+      /* "  if Input.getKeyDown(Input.KeyCode.D) then             " */
+      /* "    rb:addForce(Vec3:new(10, 0, 0))                     " */
+      /* "  end                                                   " */
+      /* "  if Input.getKeyDown(Input.KeyCode.A) then             " */
+      /* "    rb:addForce(Vec3:new(-10, 0, 0))                    " */
+      /* "  end                                                   " */
+      /* "  if Input.getKeyDown(Input.KeyCode.W) then             " */
+      /* "    rb:addForce(Vec3:new(0, 0, -10))                    " */
+      /* "  end                                                   " */
+      /* "  if Input.getKeyDown(Input.KeyCode.S) then             " */
+      /* "    rb:addForce(Vec3:new(0, 0, 10))                     " */
+      /* "  end                                                   " */
+      "end                                                     "
+    );
+
+    ScriptHandle cameraScript = Script->new("CameraScript2",
+      "this.on_init = function()                                          "
+      "  this.speed = 3                                                   "
+      "end                                                                "
+
+      "this.on_fixedupdate = function()                                   "
+      /* "  if Input.getKeyDown(Input.KeyCode.Up) then                       " */
+      /* "    this.position = this.position - Vec3:new(0, 0, 1) * this.speed " */
+      /* "  end                                                              " */
+      /* "  if Input.getKeyDown(Input.KeyCode.Down) then                     " */
+      /* "    this.position = this.position + Vec3:new(0, 0, 1) * this.speed " */
+      /* "  end                                                              " */
+      /* "  if Input.getKeyDown(Input.KeyCode.Right) then                    " */
+      /* "    this.position = this.position + Vec3:new(1, 0, 0) * this.speed " */
+      /* "  end                                                              " */
+      /* "  if Input.getKeyDown(Input.KeyCode.Left) then                     " */
+      /* "    this.position = this.position - Vec3:new(1, 0, 0) * this.speed " */
+      /* "  end                                                              " */
+      "end                                                                "
+    );
+
+    GenericHandle ecs_handle = Scene->getECSWorld(scenes[1]);
+    PhysicsWorldHandle physics_handle = Scene->getPhysicsWorld(scenes[1]);
+
+    Script->addToEntity(ecs_handle, playerBox, playerBoxScript);
+    Script->addToEntity(ecs_handle, childBox, childBoxScript);
+    Script->addToEntity(ecs_handle, camera, cameraScript);
+
+    CollisionShapeHandle boxCollider = CollisionShape->newBox(physics_handle, Vec3new(1., 1., 1.));
+    CollisionShapeHandle groundCollider = CollisionShape->newBox(physics_handle, Vec3new(5., 5., 5.));
+
+    Object->setPosition(scenes[1], childBox, Vec3new(1, 7, -10   ));
+    Object->setPosition(scenes[1], playerBox, Vec3new(-1, 5, -10   ));
+    Object->setPosition(scenes[1], ground, Vec3new(0, -10, -10   ));
+
+
+    RigidbodyHandle childRigidbody = Rigidbody->addToEntity(physics_handle, childBox, &(RigidbodyInfo) {
+      .type = EV_RIGIDBODY_KINEMATIC,
+      .collisionShape = boxCollider,
+      .ecs_world = ecs_handle,
+      .gameScene = scenes[1]
+    });
+
+    RigidbodyHandle playerRigidbody = Rigidbody->addToEntity(physics_handle, playerBox, &(RigidbodyInfo) {
+      .type = EV_RIGIDBODY_DYNAMIC,
+      .collisionShape = boxCollider,
+      .mass = 1.0,
+      .ecs_world = ecs_handle,
+      .gameScene = scenes[1]
+    });
+
+    RigidbodyInfo groundRbInfo = {
+      .type = EV_RIGIDBODY_STATIC,
+      .collisionShape = groundCollider,
+      .ecs_world = ecs_handle,
+      .gameScene = scenes[1]
+    };
+
+    RigidbodyHandle groundRigidbody = Rigidbody->addToEntity(physics_handle, ground, &groundRbInfo);
+  }
+}
 
 int main(int argc, char **argv) 
 {
@@ -43,151 +281,30 @@ int main(int argc, char **argv)
   evol_parse_args(engine, argc, argv);
   evol_init(engine);
 
-  evolmodule_t script_module  = evol_loadmodule("script");         DEBUG_ASSERT(script_module);
-  evolmodule_t ecs_module     = evol_loadmodule("ecs");            DEBUG_ASSERT(ecs_module);
-  evolmodule_t window_module  = evol_loadmodule("window");         DEBUG_ASSERT(window_module);
-  evolmodule_t input_module   = evol_loadmodule("input");          DEBUG_ASSERT(input_module);
-  evolmodule_t physics_module = evol_loadmodule("physics");        DEBUG_ASSERT(physics_module);
-  evolmodule_t asset_module   = evol_loadmodule("asset-importer"); DEBUG_ASSERT(asset_module);
-  evolmodule_t game_module    = evol_loadmodule("game");           DEBUG_ASSERT(game_module);
+  evolmodule_t script_mod  = evol_loadmodule("script");         DEBUG_ASSERT(script_mod);
+  evolmodule_t window_mod  = evol_loadmodule("window");         DEBUG_ASSERT(window_mod);
+  evolmodule_t input_mod   = evol_loadmodule("input");          DEBUG_ASSERT(input_mod);
+  evolmodule_t physics_mod = evol_loadmodule("physics");        DEBUG_ASSERT(physics_mod);
+  evolmodule_t asset_mod   = evol_loadmodule("asset-importer"); DEBUG_ASSERT(asset_mod);
+  evolmodule_t game_mod    = evol_loadmodule("game");           DEBUG_ASSERT(game_mod);
 
-  IMPORT_NAMESPACES;
-  IMPORT_EVENTS_evmod_glfw(window_module);
+  imports(script_mod , (Script))
+  imports(game_mod   , (Game, Object, Camera, Scene))
+  imports(window_mod , (Window))
+  imports(input_mod  , (Input))
+  imports(physics_mod, (PhysicsWorld, Rigidbody, CollisionShape))
 
-  U32 width = 800;
-  U32 height = 600;
+  IMPORT_EVENTS_evmod_glfw(window_mod);
+
   WindowHandle windowHandle = Window->create(width, height, "Main Window");
   Input->setActiveWindow(windowHandle);
 
   ACTIVATE_EVENT_LISTENER(keyPressedListener, KeyPressedEvent);
 
-  ECS->newScene();
+  init_scenes();
 
-  Script->initECS();
-  Physics->initECS();
-  Game->initECS();
-
-  ECSEntityID playerBox = ECS->createEntity();
-  ECSEntityID childBox = ECS->createEntity();
-
-  ObjectID camera = Camera->create(EV_CAMERA_VIEWTYPE_PERSPECTIVE);
-  assert(Camera->getActive() == camera);
-  Camera->setHFOV(camera, 120);
-  Camera->setNearPlane(camera, 0.001);
-  Camera->setFarPlane(camera, 1000);
-  Camera->setAspectRatio(camera, (F32)width / (F32)height);
-  Object->setPosition(camera, Vec3new(0, 0, -5));
-  Object->setRotation(camera, Vec4new(0, 0, 0, 1));
-  Object->setScale(camera, Vec3new(1, 1, 1));
-
-  ECS->addChild(playerBox, childBox);
-
-  ECSEntityID ground = ECS->createEntity();
-
-  ScriptHandle childBoxScript = Script->new("Entity1Script", 
-    "this.on_init = function ()                           "
-    "  this.custom_eulerangles = Vec3:new()               "
-    "  this.custom_angularvelocity = Vec3:new(0, 0.01, 0) "
-    "end                                                  "
-    "                                                     "
-    "this.on_fixedupdate = function ()                    "
-    "  if Input.getKeyDown(Input.KeyCode.Left) then       "
-    "    this.custom_eulerangles:add(Vec3:new(0,0.01,0))  "
-    "  end                                                "
-    "  if Input.getKeyDown(Input.KeyCode.Right) then      "
-    "    this.custom_eulerangles:sub(Vec3:new(0,0.01,0))  "
-    "  end                                                "
-    "  this.eulerAngles = this.custom_eulerangles         "
-    "end                                                  "
-  );
-
-  ScriptHandle playerBoxScript = Script->new("Entity2Script",
-    "this.on_collisionenter = function(other)                "
-    "  other.position = other.position + Vec3:new(0.2, 0, 0) "
-    "end                                                     "
-    "                                                        "
-    "this.on_update = function ()                            "
-    "  rb = this:getComponent(Rigidbody)                     "
-    "  if Input.getKeyDown(Input.KeyCode.Space) then         "
-    "    rb:addForce(Vec3:new(0, 100, 0))                    "
-    "  end                                                   "
-    "  if Input.getKeyDown(Input.KeyCode.D) then             "
-    "    rb:addForce(Vec3:new(10, 0, 0))                     "
-    "  end                                                   "
-    "  if Input.getKeyDown(Input.KeyCode.A) then             "
-    "    rb:addForce(Vec3:new(-10, 0, 0))                    "
-    "  end                                                   "
-    "  if Input.getKeyDown(Input.KeyCode.W) then             "
-    "    rb:addForce(Vec3:new(0, 0, -10))                    "
-    "  end                                                   "
-    "  if Input.getKeyDown(Input.KeyCode.S) then             "
-    "    rb:addForce(Vec3:new(0, 0, 10))                     "
-    "  end                                                   "
-    "end                                                     "
-  );
-
-  ScriptHandle cameraScript = Script->new("CameraScript",
-    "this.on_init = function()                                          "
-    "  this.speed = 3                                                   "
-    "end                                                                "
-
-    "this.on_fixedupdate = function()                                   "
-    "  if Input.getKeyDown(Input.KeyCode.Up) then                       "
-    "    this.position = this.position + Vec3:new(0, 1, 0) * this.speed "
-    "  end                                                              "
-    "  if Input.getKeyDown(Input.KeyCode.Down) then                     "
-    "    this.position = this.position - Vec3:new(0, 1, 0) * this.speed "
-    "  end                                                              "
-    "  if Input.getKeyDown(Input.KeyCode.Right) then                    "
-    "    this.position = this.position + Vec3:new(1, 0, 0) * this.speed "
-    "  end                                                              "
-    "  if Input.getKeyDown(Input.KeyCode.Left) then                     "
-    "    this.position = this.position - Vec3:new(1, 0, 0) * this.speed "
-    "  end                                                              "
-    "end                                                                "
-  );
-
-  Script->addToEntity(playerBox, playerBoxScript);
-  Script->addToEntity(childBox, childBoxScript);
-
-  Script->addToEntity(camera, cameraScript);
-
-  CollisionShapeHandle boxCollider = CollisionShape->newBox(Vec3new(1., 1., 1.));
-  CollisionShapeHandle groundCollider = CollisionShape->newBox(Vec3new(5., 5., 5.));
-
-  Object->setPosition(childBox, Vec3new(1, 7, -10   ));
-  Object->setRotation(childBox, Vec4new(0, 0,   0, 1));
-  Object->setScale(childBox, Vec3new(1, 1,   1   ));
-
-  Object->setPosition(playerBox, Vec3new(-1, 5, -10   ));
-  Object->setRotation(playerBox, Vec4new( 0, 0,   0, 1));
-  Object->setScale(playerBox, Vec3new( 1, 1,   1   ));
-
-  Object->setPosition(ground, Vec3new(0, -10, -10   ));
-  Object->setRotation(ground, Vec4new(0,   0,   0, 1));
-  Object->setScale(ground, Vec3new(1,   1,   1   ));
-
-  RigidbodyHandle childRigidbody = Rigidbody->addToEntity(childBox, &(RigidbodyInfo) {
-    .type = EV_RIGIDBODY_KINEMATIC,
-    .collisionShape = boxCollider,
-  });
-
-  RigidbodyHandle playerRigidbody = Rigidbody->addToEntity(playerBox, &(RigidbodyInfo) {
-    .type = EV_RIGIDBODY_DYNAMIC,
-    .collisionShape = boxCollider,
-    .mass = 1.0,
-  });
-
-  RigidbodyInfo groundRbInfo = {
-    .type = EV_RIGIDBODY_STATIC,
-    .collisionShape = groundCollider,
-  };
-
-  RigidbodyHandle groundRigidbody = Rigidbody->addToEntity(ground, &groundRbInfo);
 
   rmt_SetCurrentThreadName("Main Thread");
-
-  AssetSystem->load_mesh("MESH_0_ToyCar.mesh");
 
   U32 result = 0;
   while(result == 0) {
@@ -199,24 +316,19 @@ int main(int argc, char **argv)
       result |= Window->update(windowHandle);
     }
 
-    ev_ProfileCPU(PhysicsUpdate, 0) {
-      result |= Physics->update(0.017);
-    }
-
-    ev_ProfileCPU(ECSUpdate, 0) {
-      result |= ECS->update(0);
+    ev_ProfileCPU(GameProgress, 0) {
+      result |= Game->progress(0.01666667f);
     }
 
     sleep_ms(17);
   }
 
-  evol_unloadmodule(game_module);
-  evol_unloadmodule(physics_module);
-  evol_unloadmodule(input_module);
-  evol_unloadmodule(asset_module);
-  evol_unloadmodule(ecs_module);
-  evol_unloadmodule(script_module);
-  evol_unloadmodule(window_module);
+  evol_unloadmodule(game_mod);
+  evol_unloadmodule(physics_mod);
+  evol_unloadmodule(input_mod);
+  evol_unloadmodule(asset_mod);
+  evol_unloadmodule(script_mod);
+  evol_unloadmodule(window_mod);
   evol_deinit(engine);
   evol_destroy(engine);
   return 0;
