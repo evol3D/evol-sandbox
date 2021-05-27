@@ -119,9 +119,9 @@ init_scenes()
     GenericHandle ecs_handle = Scene->getECSWorld(scenes[0]);
     PhysicsWorldHandle physics_handle = Scene->getPhysicsWorld(scenes[0]);
 
-    Script->addToEntity(ecs_handle, playerBox, playerBoxScript);
-    Script->addToEntity(ecs_handle, childBox, childBoxScript);
-    Script->addToEntity(ecs_handle, camera, cameraScript);
+    Script->addToEntity(scenes[0], playerBox, playerBoxScript);
+    Script->addToEntity(scenes[0], childBox, childBoxScript);
+    Script->addToEntity(scenes[0], camera, cameraScript);
 
     CollisionShapeHandle boxCollider = CollisionShape->newBox(physics_handle, Vec3new(1., 1., 1.));
     CollisionShapeHandle groundCollider = CollisionShape->newBox(physics_handle, Vec3new(5., 5., 5.));
@@ -130,30 +130,23 @@ init_scenes()
     Object->setPosition(scenes[0], playerBox, Vec3new(-1, 5, -10   ));
     Object->setPosition(scenes[0], ground, Vec3new(0, -10, -10   ));
 
-
-    RigidbodyHandle childRigidbody = Rigidbody->addToEntity(physics_handle, childBox, &(RigidbodyInfo) {
+    RigidbodyHandle childRigidbody = Rigidbody->addToEntity(scenes[0], childBox, &(RigidbodyInfo) {
       .type = EV_RIGIDBODY_KINEMATIC,
       .collisionShape = boxCollider,
-      .ecs_world = ecs_handle,
-      .gameScene = scenes[0]
     });
 
-    RigidbodyHandle playerRigidbody = Rigidbody->addToEntity(physics_handle, playerBox, &(RigidbodyInfo) {
+    RigidbodyHandle playerRigidbody = Rigidbody->addToEntity(scenes[0], playerBox, &(RigidbodyInfo) {
       .type = EV_RIGIDBODY_DYNAMIC,
       .collisionShape = boxCollider,
       .mass = 1.0,
-      .ecs_world = ecs_handle,
-      .gameScene = scenes[0]
     });
 
     RigidbodyInfo groundRbInfo = {
       .type = EV_RIGIDBODY_STATIC,
       .collisionShape = groundCollider,
-      .ecs_world = ecs_handle,
-      .gameScene = scenes[0]
     };
 
-    RigidbodyHandle groundRigidbody = Rigidbody->addToEntity(physics_handle, ground, &groundRbInfo);
+    RigidbodyHandle groundRigidbody = Rigidbody->addToEntity(scenes[0], ground, &groundRbInfo);
   }
   { // Scene 1
     scenes[1] = Game->newScene();
@@ -237,9 +230,9 @@ init_scenes()
     GenericHandle ecs_handle = Scene->getECSWorld(scenes[1]);
     PhysicsWorldHandle physics_handle = Scene->getPhysicsWorld(scenes[1]);
 
-    Script->addToEntity(ecs_handle, playerBox, playerBoxScript);
-    Script->addToEntity(ecs_handle, childBox, childBoxScript);
-    Script->addToEntity(ecs_handle, camera, cameraScript);
+    Script->addToEntity(scenes[1], playerBox, playerBoxScript);
+    Script->addToEntity(scenes[1], childBox, childBoxScript);
+    Script->addToEntity(scenes[1], camera, cameraScript);
 
     CollisionShapeHandle boxCollider = CollisionShape->newBox(physics_handle, Vec3new(1., 1., 1.));
     CollisionShapeHandle groundCollider = CollisionShape->newBox(physics_handle, Vec3new(5., 5., 5.));
@@ -249,29 +242,23 @@ init_scenes()
     Object->setPosition(scenes[1], ground, Vec3new(0, -10, -10   ));
 
 
-    RigidbodyHandle childRigidbody = Rigidbody->addToEntity(physics_handle, childBox, &(RigidbodyInfo) {
+    RigidbodyHandle childRigidbody = Rigidbody->addToEntity(scenes[1], childBox, &(RigidbodyInfo) {
       .type = EV_RIGIDBODY_KINEMATIC,
       .collisionShape = boxCollider,
-      .ecs_world = ecs_handle,
-      .gameScene = scenes[1]
     });
 
-    RigidbodyHandle playerRigidbody = Rigidbody->addToEntity(physics_handle, playerBox, &(RigidbodyInfo) {
+    RigidbodyHandle playerRigidbody = Rigidbody->addToEntity(scenes[1], playerBox, &(RigidbodyInfo) {
       .type = EV_RIGIDBODY_DYNAMIC,
       .collisionShape = boxCollider,
       .mass = 1.0,
-      .ecs_world = ecs_handle,
-      .gameScene = scenes[1]
     });
 
     RigidbodyInfo groundRbInfo = {
       .type = EV_RIGIDBODY_STATIC,
       .collisionShape = groundCollider,
-      .ecs_world = ecs_handle,
-      .gameScene = scenes[1]
     };
 
-    RigidbodyHandle groundRigidbody = Rigidbody->addToEntity(physics_handle, ground, &groundRbInfo);
+    RigidbodyHandle groundRigidbody = Rigidbody->addToEntity(scenes[1], ground, &groundRbInfo);
   }
 }
 
