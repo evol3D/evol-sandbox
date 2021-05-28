@@ -60,6 +60,7 @@ init_scenes()
       "end                                                  "
       "                                                     "
       "this.on_fixedupdate = function ()                    "
+      "  print('Scene0 OnFixedUpdate Entity #' .. this.entityID)"
       "  if Input.getKeyDown(Input.KeyCode.Left) then       "
       "    this.custom_eulerangles:add(Vec3:new(0,0.01,0))  "
       "  end                                                "
@@ -101,18 +102,18 @@ init_scenes()
       "end                                                                "
 
       "this.on_fixedupdate = function()                                   "
-      /* "  if Input.getKeyDown(Input.KeyCode.Up) then                       " */
-      /* "    this.position = this.position + Vec3:new(0, 1, 0) * this.speed " */
-      /* "  end                                                              " */
-      /* "  if Input.getKeyDown(Input.KeyCode.Down) then                     " */
-      /* "    this.position = this.position - Vec3:new(0, 1, 0) * this.speed " */
-      /* "  end                                                              " */
-      /* "  if Input.getKeyDown(Input.KeyCode.Right) then                    " */
-      /* "    this.position = this.position + Vec3:new(1, 0, 0) * this.speed " */
-      /* "  end                                                              " */
-      /* "  if Input.getKeyDown(Input.KeyCode.Left) then                     " */
-      /* "    this.position = this.position - Vec3:new(1, 0, 0) * this.speed " */
-      /* "  end                                                              " */
+      "  if Input.getKeyDown(Input.KeyCode.Up) then                       "
+      "    this.position = this.position + Vec3:new(0, 1, 0) * this.speed "
+      "  end                                                              "
+      "  if Input.getKeyDown(Input.KeyCode.Down) then                     "
+      "    this.position = this.position - Vec3:new(0, 1, 0) * this.speed "
+      "  end                                                              "
+      "  if Input.getKeyDown(Input.KeyCode.Right) then                    "
+      "    this.position = this.position + Vec3:new(1, 0, 0) * this.speed "
+      "  end                                                              "
+      "  if Input.getKeyDown(Input.KeyCode.Left) then                     "
+      "    this.position = this.position - Vec3:new(1, 0, 0) * this.speed "
+      "  end                                                              "
       "end                                                                "
     );
 
@@ -152,7 +153,7 @@ init_scenes()
     scenes[1] = Game->newScene();
 
     GameObject playerBox = Scene->createObject(scenes[1]);
-    GameObject childBox = Scene->createChildObject(scenes[1], playerBox);
+    GameObject childBox = Scene->createObject(scenes[1]);
     GameObject ground = Scene->createObject(scenes[1]);
 
     GameObject camera = Scene->createCamera(scenes[1], EV_CAMERA_VIEWTYPE_PERSPECTIVE);
@@ -171,13 +172,14 @@ init_scenes()
       "end                                                  "
       "                                                     "
       "this.on_fixedupdate = function ()                    "
-      /* "  if Input.getKeyDown(Input.KeyCode.Left) then       " */
-      /* "    this.custom_eulerangles:add(Vec3:new(0,0.01,0))  " */
-      /* "  end                                                " */
-      /* "  if Input.getKeyDown(Input.KeyCode.Right) then      " */
-      /* "    this.custom_eulerangles:sub(Vec3:new(0,0.01,0))  " */
-      /* "  end                                                " */
-      /* "  this.eulerAngles = this.custom_eulerangles         " */
+      "  print('Scene1 OnFixedUpdate Entity #' .. this.entityID)"
+      "  if Input.getKeyDown(Input.KeyCode.Left) then       "
+      "    this.custom_eulerangles:add(Vec3:new(0,0.01,0))  "
+      "  end                                                "
+      "  if Input.getKeyDown(Input.KeyCode.Right) then      "
+      "    this.custom_eulerangles:sub(Vec3:new(0,0.01,0))  "
+      "  end                                                "
+      "  this.eulerAngles = this.custom_eulerangles         "
       "end                                                  "
     );
 
@@ -187,22 +189,22 @@ init_scenes()
       "end                                                     "
       "                                                        "
       "this.on_update = function ()                            "
-      /* "  rb = this:getComponent(Rigidbody)                     " */
-      /* "  if Input.getKeyDown(Input.KeyCode.Space) then         " */
-      /* "    rb:addForce(Vec3:new(0, 100, 0))                    " */
-      /* "  end                                                   " */
-      /* "  if Input.getKeyDown(Input.KeyCode.D) then             " */
-      /* "    rb:addForce(Vec3:new(10, 0, 0))                     " */
-      /* "  end                                                   " */
-      /* "  if Input.getKeyDown(Input.KeyCode.A) then             " */
-      /* "    rb:addForce(Vec3:new(-10, 0, 0))                    " */
-      /* "  end                                                   " */
-      /* "  if Input.getKeyDown(Input.KeyCode.W) then             " */
-      /* "    rb:addForce(Vec3:new(0, 0, -10))                    " */
-      /* "  end                                                   " */
-      /* "  if Input.getKeyDown(Input.KeyCode.S) then             " */
-      /* "    rb:addForce(Vec3:new(0, 0, 10))                     " */
-      /* "  end                                                   " */
+      "  rb = this:getComponent(Rigidbody)                     "
+      "  if Input.getKeyDown(Input.KeyCode.Space) then         "
+      "    rb:addForce(Vec3:new(0, 100, 0))                    "
+      "  end                                                   "
+      "  if Input.getKeyDown(Input.KeyCode.D) then             "
+      "    rb:addForce(Vec3:new(10, 0, 0))                     "
+      "  end                                                   "
+      "  if Input.getKeyDown(Input.KeyCode.A) then             "
+      "    rb:addForce(Vec3:new(-10, 0, 0))                    "
+      "  end                                                   "
+      "  if Input.getKeyDown(Input.KeyCode.W) then             "
+      "    rb:addForce(Vec3:new(0, 0, -10))                    "
+      "  end                                                   "
+      "  if Input.getKeyDown(Input.KeyCode.S) then             "
+      "    rb:addForce(Vec3:new(0, 0, 10))                     "
+      "  end                                                   "
       "end                                                     "
     );
 
@@ -212,18 +214,18 @@ init_scenes()
       "end                                                                "
 
       "this.on_fixedupdate = function()                                   "
-      /* "  if Input.getKeyDown(Input.KeyCode.Up) then                       " */
-      /* "    this.position = this.position - Vec3:new(0, 0, 1) * this.speed " */
-      /* "  end                                                              " */
-      /* "  if Input.getKeyDown(Input.KeyCode.Down) then                     " */
-      /* "    this.position = this.position + Vec3:new(0, 0, 1) * this.speed " */
-      /* "  end                                                              " */
-      /* "  if Input.getKeyDown(Input.KeyCode.Right) then                    " */
-      /* "    this.position = this.position + Vec3:new(1, 0, 0) * this.speed " */
-      /* "  end                                                              " */
-      /* "  if Input.getKeyDown(Input.KeyCode.Left) then                     " */
-      /* "    this.position = this.position - Vec3:new(1, 0, 0) * this.speed " */
-      /* "  end                                                              " */
+      "  if Input.getKeyDown(Input.KeyCode.Up) then                       "
+      "    this.position = this.position - Vec3:new(0, 0, 1) * this.speed "
+      "  end                                                              "
+      "  if Input.getKeyDown(Input.KeyCode.Down) then                     "
+      "    this.position = this.position + Vec3:new(0, 0, 1) * this.speed "
+      "  end                                                              "
+      "  if Input.getKeyDown(Input.KeyCode.Right) then                    "
+      "    this.position = this.position + Vec3:new(1, 0, 0) * this.speed "
+      "  end                                                              "
+      "  if Input.getKeyDown(Input.KeyCode.Left) then                     "
+      "    this.position = this.position - Vec3:new(1, 0, 0) * this.speed "
+      "  end                                                              "
       "end                                                                "
     );
 
@@ -243,8 +245,9 @@ init_scenes()
 
 
     RigidbodyHandle childRigidbody = Rigidbody->addToEntity(scenes[1], childBox, &(RigidbodyInfo) {
-      .type = EV_RIGIDBODY_KINEMATIC,
+      .type = EV_RIGIDBODY_DYNAMIC,
       .collisionShape = boxCollider,
+      .mass = 1.0,
     });
 
     RigidbodyHandle playerRigidbody = Rigidbody->addToEntity(scenes[1], playerBox, &(RigidbodyInfo) {
@@ -289,7 +292,6 @@ int main(int argc, char **argv)
   ACTIVATE_EVENT_LISTENER(keyPressedListener, KeyPressedEvent);
 
   init_scenes();
-
 
   rmt_SetCurrentThreadName("Main Thread");
 
