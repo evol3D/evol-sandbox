@@ -190,11 +190,6 @@ int main(int argc, char **argv)
   AssetManager->mount("../res", "res:/");
   AssetManager->mount("../res/scripts", "scripts:/");
 
-  AssetHandle handle = Asset->load("scripts://script.lua");
-  TextAsset txt = TextLoader->loadAsset(handle);
-  ev_log_debug("Script: \n%s\n", txt.text);
-  Asset->free(handle);
-
   IMPORT_EVENTS_evmod_glfw(window_mod);
 
   WindowHandle windowHandle = Window->create(width, height, "Main Window");
