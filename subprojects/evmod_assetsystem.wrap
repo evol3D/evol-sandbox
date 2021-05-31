@@ -1,6 +1,0 @@
-[wrap-git]
-url = https://github.com/evol3D/evol-mod-assetsystem
-revision = master
-
-[provide]
-dependency_names = evmod_assetsystem

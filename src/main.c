@@ -10,7 +10,7 @@
 #include IMPORT_MODULE_H
 #define IMPORT_MODULE evmod_script
 #include IMPORT_MODULE_H
-#define IMPORT_MODULE evmod_assetsystem
+#define IMPORT_MODULE evmod_assets
 #include IMPORT_MODULE_H
 #define IMPORT_MODULE evmod_game
 #include IMPORT_MODULE_H
@@ -53,69 +53,20 @@ init_scenes()
     Camera->setAspectRatio(scenes[0], camera, (F32)width / (F32)height);
     Object->setPosition(scenes[0], camera, Vec3new(0, 0, -5));
 
-    ScriptHandle childBoxScript = Script->new("Entity1Script1", 
-      "this.on_init = function ()                           "
-      "  this.custom_eulerangles = Vec3:new()               "
-      "  this.custom_angularvelocity = Vec3:new(0, 0.01, 0) "
-      "end                                                  "
-      "                                                     "
-      "this.on_fixedupdate = function ()                    "
-      "  print('Scene0 OnFixedUpdate Entity #' .. this.entityID)"
-      "  if Input.getKeyDown(Input.KeyCode.Left) then       "
-      "    this.custom_eulerangles:add(Vec3:new(0,0.01,0))  "
-      "  end                                                "
-      "  if Input.getKeyDown(Input.KeyCode.Right) then      "
-      "    this.custom_eulerangles:sub(Vec3:new(0,0.01,0))  "
-      "  end                                                "
-      "  this.eulerAngles = this.custom_eulerangles         "
-      "end                                                  "
-    );
+    AssetHandle childBoxScriptAsset = Asset->load("scripts://Scene0/child.lua");
+    TextAsset childScript = TextLoader->loadAsset(childBoxScriptAsset);
+    ScriptHandle childBoxScript = Script->new("ChildScriptScene0", childScript.text);
+    Asset->free(childBoxScriptAsset);
 
-    ScriptHandle playerBoxScript = Script->new("Entity2Script1",
-      "this.on_collisionenter = function(other)                "
-      "  other.position = other.position + Vec3:new(0.2, 0, 0) "
-      "end                                                     "
-      "                                                        "
-      "this.on_update = function ()                            "
-      "  rb = this:getComponent(Rigidbody)                     "
-      "  if Input.getKeyDown(Input.KeyCode.Space) then         "
-      "    rb:addForce(Vec3:new(0, 100, 0))                    "
-      "  end                                                   "
-      "  if Input.getKeyDown(Input.KeyCode.D) then             "
-      "    rb:addForce(Vec3:new(10, 0, 0))                     "
-      "  end                                                   "
-      "  if Input.getKeyDown(Input.KeyCode.A) then             "
-      "    rb:addForce(Vec3:new(-10, 0, 0))                    "
-      "  end                                                   "
-      "  if Input.getKeyDown(Input.KeyCode.W) then             "
-      "    rb:addForce(Vec3:new(0, 0, -10))                    "
-      "  end                                                   "
-      "  if Input.getKeyDown(Input.KeyCode.S) then             "
-      "    rb:addForce(Vec3:new(0, 0, 10))                     "
-      "  end                                                   "
-      "end                                                     "
-    );
+    AssetHandle playerBoxScriptAsset = Asset->load("scripts://Scene0/player.lua");
+    TextAsset playerScript = TextLoader->loadAsset(playerBoxScriptAsset);
+    ScriptHandle playerBoxScript = Script->new("PlayerScriptScene0", playerScript.text);
+    Asset->free(playerBoxScriptAsset);
 
-    ScriptHandle cameraScript = Script->new("CameraScript1",
-      "this.on_init = function()                                          "
-      "  this.speed = 3                                                   "
-      "end                                                                "
-
-      "this.on_fixedupdate = function()                                   "
-      "  if Input.getKeyDown(Input.KeyCode.Up) then                       "
-      "    this.position = this.position + Vec3:new(0, 1, 0) * this.speed "
-      "  end                                                              "
-      "  if Input.getKeyDown(Input.KeyCode.Down) then                     "
-      "    this.position = this.position - Vec3:new(0, 1, 0) * this.speed "
-      "  end                                                              "
-      "  if Input.getKeyDown(Input.KeyCode.Right) then                    "
-      "    this.position = this.position + Vec3:new(1, 0, 0) * this.speed "
-      "  end                                                              "
-      "  if Input.getKeyDown(Input.KeyCode.Left) then                     "
-      "    this.position = this.position - Vec3:new(1, 0, 0) * this.speed "
-      "  end                                                              "
-      "end                                                                "
-    );
+    AssetHandle cameraScriptAsset = Asset->load("scripts://Scene0/camera.lua");
+    TextAsset cameraScriptText = TextLoader->loadAsset(cameraScriptAsset);
+    ScriptHandle cameraScript = Script->new("CameraScriptScene0", cameraScriptText.text);
+    Asset->free(cameraScriptAsset);
 
     GenericHandle ecs_handle = Scene->getECSWorld(scenes[0]);
     PhysicsWorldHandle physics_handle = Scene->getPhysicsWorld(scenes[0]);
@@ -165,69 +116,20 @@ init_scenes()
     Camera->setAspectRatio(scenes[1], camera, (F32)width / (F32)height);
     Object->setPosition(scenes[1], camera, Vec3new(0, 0, -5));
 
-    ScriptHandle childBoxScript = Script->new("Entity1Script2", 
-      "this.on_init = function ()                           "
-      "  this.custom_eulerangles = Vec3:new()               "
-      "  this.custom_angularvelocity = Vec3:new(0, 0.01, 0) "
-      "end                                                  "
-      "                                                     "
-      "this.on_fixedupdate = function ()                    "
-      "  print('Scene1 OnFixedUpdate Entity #' .. this.entityID)"
-      "  if Input.getKeyDown(Input.KeyCode.Left) then       "
-      "    this.custom_eulerangles:add(Vec3:new(0,0.01,0))  "
-      "  end                                                "
-      "  if Input.getKeyDown(Input.KeyCode.Right) then      "
-      "    this.custom_eulerangles:sub(Vec3:new(0,0.01,0))  "
-      "  end                                                "
-      "  this.eulerAngles = this.custom_eulerangles         "
-      "end                                                  "
-    );
+    AssetHandle childBoxScriptAsset = Asset->load("scripts://Scene1/child.lua");
+    TextAsset childScript = TextLoader->loadAsset(childBoxScriptAsset);
+    ScriptHandle childBoxScript = Script->new("ChildScriptScene1", childScript.text);
+    Asset->free(childBoxScriptAsset);
 
-    ScriptHandle playerBoxScript = Script->new("Entity2Script2",
-      "this.on_collisionenter = function(other)                "
-      "  other.position = other.position + Vec3:new(0.2, 0, 0) "
-      "end                                                     "
-      "                                                        "
-      "this.on_update = function ()                            "
-      "  rb = this:getComponent(Rigidbody)                     "
-      "  if Input.getKeyDown(Input.KeyCode.Space) then         "
-      "    rb:addForce(Vec3:new(0, 100, 0))                    "
-      "  end                                                   "
-      "  if Input.getKeyDown(Input.KeyCode.D) then             "
-      "    rb:addForce(Vec3:new(10, 0, 0))                     "
-      "  end                                                   "
-      "  if Input.getKeyDown(Input.KeyCode.A) then             "
-      "    rb:addForce(Vec3:new(-10, 0, 0))                    "
-      "  end                                                   "
-      "  if Input.getKeyDown(Input.KeyCode.W) then             "
-      "    rb:addForce(Vec3:new(0, 0, -10))                    "
-      "  end                                                   "
-      "  if Input.getKeyDown(Input.KeyCode.S) then             "
-      "    rb:addForce(Vec3:new(0, 0, 10))                     "
-      "  end                                                   "
-      "end                                                     "
-    );
+    AssetHandle playerBoxScriptAsset = Asset->load("scripts://Scene1/player.lua");
+    TextAsset playerScript = TextLoader->loadAsset(playerBoxScriptAsset);
+    ScriptHandle playerBoxScript = Script->new("PlayerScriptScene1", playerScript.text);
+    Asset->free(playerBoxScriptAsset);
 
-    ScriptHandle cameraScript = Script->new("CameraScript2",
-      "this.on_init = function()                                          "
-      "  this.speed = 3                                                   "
-      "end                                                                "
-
-      "this.on_fixedupdate = function()                                   "
-      "  if Input.getKeyDown(Input.KeyCode.Up) then                       "
-      "    this.position = this.position - Vec3:new(0, 0, 1) * this.speed "
-      "  end                                                              "
-      "  if Input.getKeyDown(Input.KeyCode.Down) then                     "
-      "    this.position = this.position + Vec3:new(0, 0, 1) * this.speed "
-      "  end                                                              "
-      "  if Input.getKeyDown(Input.KeyCode.Right) then                    "
-      "    this.position = this.position + Vec3:new(1, 0, 0) * this.speed "
-      "  end                                                              "
-      "  if Input.getKeyDown(Input.KeyCode.Left) then                     "
-      "    this.position = this.position - Vec3:new(1, 0, 0) * this.speed "
-      "  end                                                              "
-      "end                                                                "
-    );
+    AssetHandle cameraScriptAsset = Asset->load("scripts://Scene1/camera.lua");
+    TextAsset cameraScriptText = TextLoader->loadAsset(cameraScriptAsset);
+    ScriptHandle cameraScript = Script->new("CameraScriptScene1", cameraScriptText.text);
+    Asset->free(cameraScriptAsset);
 
     GenericHandle ecs_handle = Scene->getECSWorld(scenes[1]);
     PhysicsWorldHandle physics_handle = Scene->getPhysicsWorld(scenes[1]);
@@ -275,7 +177,7 @@ int main(int argc, char **argv)
   evolmodule_t window_mod  = evol_loadmodule("window");         DEBUG_ASSERT(window_mod);
   evolmodule_t input_mod   = evol_loadmodule("input");          DEBUG_ASSERT(input_mod);
   evolmodule_t physics_mod = evol_loadmodule("physics");        DEBUG_ASSERT(physics_mod);
-  evolmodule_t asset_mod   = evol_loadmodule("asset-importer"); DEBUG_ASSERT(asset_mod);
+  evolmodule_t asset_mod   = evol_loadmodule("assetmanager");   DEBUG_ASSERT(asset_mod);
   evolmodule_t game_mod    = evol_loadmodule("game");           DEBUG_ASSERT(game_mod);
 
   imports(script_mod , (Script))
@@ -283,6 +185,15 @@ int main(int argc, char **argv)
   imports(window_mod , (Window))
   imports(input_mod  , (Input))
   imports(physics_mod, (PhysicsWorld, Rigidbody, CollisionShape))
+  imports(asset_mod  , (AssetManager, Asset, TextLoader))
+
+  AssetManager->mount("../res", "res:/");
+  AssetManager->mount("../res/scripts", "scripts:/");
+
+  AssetHandle handle = Asset->load("scripts://script.lua");
+  TextAsset txt = TextLoader->loadAsset(handle);
+  ev_log_debug("Script: \n%s\n", txt.text);
+  Asset->free(handle);
 
   IMPORT_EVENTS_evmod_glfw(window_mod);
 
