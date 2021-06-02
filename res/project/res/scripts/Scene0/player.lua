@@ -1,5 +1,5 @@
 this.on_collisionenter = function(other)
-  other.position = other.position + Vec3:new(3.2, 0, 0)
+  -- other.position = other.position + Vec3:new(3.2, 0, 0)
 end
 
 this.on_update = function ()
