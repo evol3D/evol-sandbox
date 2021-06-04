@@ -4,7 +4,7 @@ this.on_init = function()
 end
 
 this.on_fixedupdate = function()
-  if Input.getKeyJustPressed(Input.KeyCode.Enter) then
+  if Input.getKeyDown(Input.KeyCode.Enter) then
     gotoScene('SideScene')
   end
 
