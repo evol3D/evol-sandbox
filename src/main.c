@@ -8,19 +8,10 @@
 
 #define IMPORT_MODULE evmod_glfw
 #include IMPORT_MODULE_H
-#define IMPORT_MODULE evmod_physics
-#include IMPORT_MODULE_H
-#define IMPORT_MODULE evmod_script
-#include IMPORT_MODULE_H
 #define IMPORT_MODULE evmod_assets
 #include IMPORT_MODULE_H
 #define IMPORT_MODULE evmod_game
 #include IMPORT_MODULE_H
-
-GameScene scenes[2];
-
-U32 width = 800;
-U32 height = 600;
 
 // Close window when Q is pressed
 DECLARE_EVENT_LISTENER(keyPressedListener, (KeyPressedEvent *event) {
@@ -28,10 +19,9 @@ DECLARE_EVENT_LISTENER(keyPressedListener, (KeyPressedEvent *event) {
     Window->setShouldClose(event->handle, true);
 
   else if(event->keyCode == 49) // Numrow 1
-    Game->setActiveScene(scenes[0]);
+    Game->setActiveScene(Scene->getFromName("MainScene"));
   else if(event->keyCode == 50) // Numrow 2
-    Game->setActiveScene(scenes[1]);
-
+    Game->setActiveScene(Scene->getFromName("SisyphusoScene"));
   /* else if(event->keyCode == 45) // Numrow - */
   /* else if(event->keyCode == 61) // Numrow = */
 })
@@ -42,22 +32,20 @@ int main(int argc, char **argv)
   evol_parse_args(engine, argc, argv);
   evol_init(engine);
 
-
-  evolmodule_t script_mod  = evol_loadmodule("script");         DEBUG_ASSERT(script_mod);
+  evolmodule_t game_mod    = evol_loadmodule("game");           DEBUG_ASSERT(game_mod);
+  evolmodule_t asset_mod   = evol_loadmodule("assetmanager");   DEBUG_ASSERT(asset_mod);
   evolmodule_t window_mod  = evol_loadmodule("window");         DEBUG_ASSERT(window_mod);
   evolmodule_t input_mod   = evol_loadmodule("input");          DEBUG_ASSERT(input_mod);
-  evolmodule_t physics_mod = evol_loadmodule("physics");        DEBUG_ASSERT(physics_mod);
-  evolmodule_t asset_mod   = evol_loadmodule("assetmanager");   DEBUG_ASSERT(asset_mod);
-  evolmodule_t game_mod    = evol_loadmodule("game");           DEBUG_ASSERT(game_mod);
 
-  imports(script_mod , (Script))
+  imports(asset_mod  , (AssetManager, Asset, TextLoader, JSONLoader))
   imports(game_mod   , (Game, Object, Camera, Scene))
   imports(window_mod , (Window))
   imports(input_mod  , (Input))
-  imports(physics_mod, (PhysicsWorld, Rigidbody, CollisionShape))
-  imports(asset_mod  , (AssetManager, Asset, TextLoader, JSONLoader))
 
   IMPORT_EVENTS_evmod_glfw(window_mod);
+
+  U32 width = 800;
+  U32 height = 600;
 
   WindowHandle windowHandle = Window->create(width, height, "Main Window");
   Input->setActiveWindow(windowHandle);
@@ -107,13 +95,22 @@ int main(int argc, char **argv)
     double scene_count = evjs_get(project_desc.json_data, "scenes.len")->as_num;
     for(int i = 0; i < (int)scene_count;i++) {
       evstring scenepath_id = evstring_newfmt("scenes[%d].path", i);
+      evstring sceneid_id = evstring_newfmt("scenes[%d].id", i);
       evstring scenepath = evstring_refclone(evjs_get(project_desc.json_data, scenepath_id)->as_str);
+      evstring sceneid = evstring_refclone(evjs_get(project_desc.json_data, sceneid_id)->as_str);
 
-      scenes[0] = Game->loadSceneFromFile(scenepath);
+      GameScene scene = Scene->loadFromFile(scenepath);
+      Scene->setName(scene, sceneid);
 
+      evstring_free(sceneid);
+      evstring_free(sceneid_id);
       evstring_free(scenepath);
       evstring_free(scenepath_id);
     }
+
+    evstring activeScene = evstring_refclone(evjs_get(project_desc.json_data, "activeScene")->as_str);
+    Game->setActiveScene(Scene->getFromName(activeScene));
+    evstring_free(activeScene);
   }
 
   evstring_free(project_dir);
@@ -138,10 +135,8 @@ int main(int argc, char **argv)
   }
 
   evol_unloadmodule(game_mod);
-  evol_unloadmodule(physics_mod);
-  evol_unloadmodule(input_mod);
   evol_unloadmodule(asset_mod);
-  evol_unloadmodule(script_mod);
+  evol_unloadmodule(input_mod);
   evol_unloadmodule(window_mod);
   evol_deinit(engine);
   evol_destroy(engine);
