@@ -19,7 +19,11 @@
     {
       "id": "MainScene",
       "path": "scenes://MainScene.evsc"
+    },
+    {
+      "id": "SideScene",
+      "path": "scenes://SideScene.evsc"
     }
   ],
-  "activeScene": "MainScene"
+  "activeScene": "SideScene"
 }

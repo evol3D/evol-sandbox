@@ -1,5 +1,5 @@
 {
-  "id":"MainScene",
+  "id":"SisyphusoScene",
   "nodes": [
     {
       "id": "Camera",
@@ -13,15 +13,15 @@
         {
           "type": "CameraComponent",
           "view": "Perspective",
-          "fov": 120,
+          "fov": 60,
           "near": 0.001,
           "far": 1000,
           "aspectRatio": 1.3333
         },
         {
           "type": "ScriptComponent",
-          "script_name": "MainCameraController",
-          "script_path": "scripts://MainScene/camera.lua"
+          "script_name": "SideCameraController",
+          "script_path": "scripts://SideScene/camera.lua"
         }
       ]
     },
@@ -30,7 +30,7 @@
       "components": [
         {
           "type": "TransformComponent",
-          "position": [0.0, 10.0, -15.0],
+          "position": [0.0, 0.0, -15.0],
           "rotation": [0.0, 0.0, 0.0],
           "scale": [1.0, 1.0, 1.0]
         },
@@ -46,8 +46,8 @@
         },
         {
           "type": "ScriptComponent",
-          "script_name": "MainPlayerController",
-          "script_path": "scripts://MainScene/player.lua"
+          "script_name": "SidePlayerController",
+          "script_path": "scripts://SideScene/player.lua"
         }
       ],
       "children": [
@@ -66,22 +66,14 @@
               "mass": 1.0,
               "restitution": 1.0,
               "collisionShape": {
-                "type": "Box",
-                "halfExtents": [1.0, 1.0, 1.0]
+                "type": "Sphere",
+                "radius": 1.0
               }
             },
             {
-              "type": "CameraComponent",
-              "view": "Perspective",
-              "fov": 120,
-              "near": 0.001,
-              "far": 1000,
-              "aspectRatio": 1.3333
-            },
-            {
               "type": "ScriptComponent",
-              "script_name": "MainChildController",
-              "script_path": "scripts://MainScene/child.lua"
+              "script_name": "SideChildController",
+              "script_path": "scripts://SideScene/child.lua"
             }
           ]
         }
@@ -102,8 +94,8 @@
           "mass": 0.0,
           "restitution": 0.0,
           "collisionShape": {
-            "type": "Box",
-            "halfExtents": [10.0, 10.0, 10.0]
+            "type": "Sphere",
+            "radius": 10.0
           }
         }
       ]
