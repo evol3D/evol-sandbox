@@ -14,6 +14,8 @@
 #include IMPORT_MODULE_H
 #define IMPORT_MODULE evmod_game
 #include IMPORT_MODULE_H
+#define IMPORT_MODULE evmod_renderer
+#include IMPORT_MODULE_H
 
 GameScene scenes[2];
 
@@ -167,7 +169,7 @@ init_scenes()
   }
 }
 
-int main(int argc, char **argv) 
+int main(int argc, char **argv)
 {
   evolengine_t *engine = evol_create();
   evol_parse_args(engine, argc, argv);
@@ -179,6 +181,7 @@ int main(int argc, char **argv)
   evolmodule_t physics_mod = evol_loadmodule("physics");        DEBUG_ASSERT(physics_mod);
   evolmodule_t asset_mod   = evol_loadmodule("assetmanager");   DEBUG_ASSERT(asset_mod);
   evolmodule_t game_mod    = evol_loadmodule("game");           DEBUG_ASSERT(game_mod);
+  evolmodule_t renderer_mod= evol_loadmodule("renderer");       DEBUG_ASSERT(renderer_mod);
 
   imports(script_mod , (Script))
   imports(game_mod   , (Game, Object, Camera, Scene))
@@ -186,6 +189,7 @@ int main(int argc, char **argv)
   imports(input_mod  , (Input))
   imports(physics_mod, (PhysicsWorld, Rigidbody, CollisionShape))
   imports(asset_mod  , (AssetManager, Asset, TextLoader))
+  imports(renderer_mod,(Renderer))
 
   AssetManager->mount("../res", "res:/");
   AssetManager->mount("../res/scripts", "scripts:/");
@@ -194,6 +198,7 @@ int main(int argc, char **argv)
 
   WindowHandle windowHandle = Window->create(width, height, "Main Window");
   Input->setActiveWindow(windowHandle);
+  Renderer->setWindow(windowHandle);
 
   ACTIVATE_EVENT_LISTENER(keyPressedListener, KeyPressedEvent);
 
@@ -214,7 +219,7 @@ int main(int argc, char **argv)
     ev_ProfileCPU(GameProgress, 0) {
       result |= Game->progress(0.01666667f);
     }
-
+    Renderer->run();
     sleep_ms(17);
   }
 
