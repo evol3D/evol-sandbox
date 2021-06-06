@@ -4,7 +4,6 @@ this.on_init = function ()
 end
 
 this.on_fixedupdate = function ()
-  print('Scene0 OnFixedUpdate Entity #' .. this.entityID)
   if Input.getKeyDown(Input.KeyCode.Left) then
     this.custom_eulerangles:add(Vec3:new(0,0.01,0))
   end

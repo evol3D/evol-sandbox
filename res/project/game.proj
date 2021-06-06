@@ -1,0 +1,29 @@
+{
+  "name": "dummy_game",
+  "engineVersion": "0.2",
+  "mounts": [
+    {
+      "path": "./res",
+      "mountpoint": "res"
+    },
+    {
+      "path": "./res/scripts",
+      "mountpoint": "scripts"
+    },
+    {
+      "path": "./res/scenes",
+      "mountpoint": "scenes"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "MainScene",
+      "path": "scenes://MainScene.evsc"
+    },
+    {
+      "id": "SideScene",
+      "path": "scenes://SideScene.evsc"
+    }
+  ],
+  "activeScene": "SideScene"
+}
