@@ -9,6 +9,8 @@
 **/.idea/**
 **/.clangd/**
 
+**/tags*
+
 compile_commands.json
 
 subprojects/*
@@ -29,3 +31,13 @@ subprojects/glfw.wrap
 subprojects/hashmap.wrap
 subprojects/luajit.wrap
 subprojects/remotery.wrap
+subprojects/assetsys.wrap
+subprojects/evjson.wrap
+subprojects/evstr.wrap
+subprojects/luaautoc.wrap
+subprojects/luadbg.wrap
+subprojects/shaderc_clang.wrap
+subprojects/spvref.wrap
+subprojects/vec.wrap
+subprojects/vma.wrap
+subprojects/volk.wrap
