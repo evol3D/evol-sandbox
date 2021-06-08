@@ -40,8 +40,9 @@
           "mass": 1.0,
           "restitution": 1.0,
           "collisionShape": {
-            "type": "Sphere",
-            "radius": 1.0
+            "type": "Capsule",
+            "radius": 1.0,
+            "height": 2.0
           }
         },
         {
@@ -76,6 +77,32 @@
               "script_path": "scripts://SideScene/child.lua"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "Ceiling",
+      "components": [
+        {
+          "type": "TransformComponent",
+          "position": [0.0, 15.0, -15.0],
+          "rotation": [0.0, 0.0, 0.0],
+          "scale": [1.0, 1.0, 1.0]
+        },
+        {
+          "type": "RigidbodyComponent",
+          "rigidbodyType": "Ghost",
+          "mass": 0.0,
+          "restitution": 0.0,
+          "collisionShape": {
+            "type": "Box",
+            "halfExtents": [10.0, 10.0, 10.0]
+          }
+        },
+        {
+          "type": "ScriptComponent",
+          "script_name": "SideGhostController",
+          "script_path": "scripts://SideScene/ghost.lua"
         }
       ]
     },

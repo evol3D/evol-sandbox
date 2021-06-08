@@ -13,7 +13,7 @@
         {
           "type": "CameraComponent",
           "view": "Perspective",
-          "fov": 120,
+          "fov": 60,
           "near": 0.001,
           "far": 1000,
           "aspectRatio": 1.3333

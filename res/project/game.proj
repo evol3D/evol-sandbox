@@ -25,5 +25,5 @@
       "path": "scenes://SideScene.evsc"
     }
   ],
-  "activeScene": "SideScene"
+  "activeScene": "MainScene"
 }

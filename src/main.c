@@ -18,10 +18,8 @@ DECLARE_EVENT_LISTENER(keyPressedListener, (KeyPressedEvent *event) {
   if(event->keyCode == 81) // tests if Q was pressed
     Window->setShouldClose(event->handle, true);
 
-  else if(event->keyCode == 49) // Numrow 1
-    Game->setActiveScene(Scene->getFromName("MainScene"));
-  else if(event->keyCode == 50) // Numrow 2
-    Game->setActiveScene(Scene->getFromName("SisyphusoScene"));
+  /* else if(event->keyCode == 49) // Numrow 1 */
+  /* else if(event->keyCode == 50) // Numrow 2 */
   /* else if(event->keyCode == 45) // Numrow - */
   /* else if(event->keyCode == 61) // Numrow = */
 })
@@ -37,7 +35,7 @@ int main(int argc, char **argv)
   evolmodule_t window_mod  = evol_loadmodule("window");         DEBUG_ASSERT(window_mod);
   evolmodule_t input_mod   = evol_loadmodule("input");          DEBUG_ASSERT(input_mod);
 
-  imports(asset_mod  , (AssetManager, Asset, TextLoader, JSONLoader))
+  imports(asset_mod  , (AssetManager, Asset, TextLoader, JSONLoader, ShaderLoader))
   imports(game_mod   , (Game, Object, Camera, Scene))
   imports(window_mod , (Window))
   imports(input_mod  , (Input))
@@ -63,6 +61,14 @@ int main(int argc, char **argv)
   AssetManager->mount(&project_dir, &project_mountpoint);
   evstring_free(project_mountpoint);
 
+  AssetHandle shader_asset = Asset->load("project://triangle.vert");
+  ShaderAsset shader_bin = ShaderLoader->loadAsset(shader_asset, EV_SHADERASSETSTAGE_VERTEX, "TriangleVertex", "main", EV_SHADER_BIN);
+  ShaderAsset shader_asm = ShaderLoader->loadAsset(shader_asset, EV_SHADERASSETSTAGE_VERTEX, "TriangleVertex", "main", EV_SHADER_ASM);
+
+  ev_log_debug("Shader Binary: %.*s", shader_bin.len, shader_bin.binary);
+  ev_log_debug("Shader Assembly: %.*s", shader_asm.len, shader_asm.binary);
+
+  Asset->free(shader_asset);
 
   EV_DEFER(
       AssetHandle project_config = Asset->load("project://game.proj"),
@@ -119,12 +125,12 @@ int main(int argc, char **argv)
 
   U32 result = 0;
   while(result == 0) {
-    ev_ProfileCPU(EventSystemProgress, 0) {
-      result |= EventSystem.progress();
-    }
-
     ev_ProfileCPU(WindowUpdate, 0) {
       result |= Window->update(windowHandle);
+    }
+
+    ev_ProfileCPU(EventSystemProgress, 0) {
+      result |= EventSystem.progress();
     }
 
     ev_ProfileCPU(GameProgress, 0) {
