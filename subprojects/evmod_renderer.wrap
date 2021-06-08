@@ -1,0 +1,6 @@
+[wrap-git]
+url = https://github.com/evol3D/evol-mod-renderer
+revision = master
+
+[provide]
+dependency_names = evmod_renderer
