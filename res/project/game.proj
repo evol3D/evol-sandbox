@@ -13,6 +13,10 @@
     {
       "path": "./res/scenes",
       "mountpoint": "scenes"
+    },
+    {
+      "path": "./res/shaders",
+      "mountpoint": "shaders"
     }
   ],
   "scenes": [

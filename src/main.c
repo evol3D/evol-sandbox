@@ -12,6 +12,8 @@
 #include IMPORT_MODULE_H
 #define IMPORT_MODULE evmod_game
 #include IMPORT_MODULE_H
+#define IMPORT_MODULE evmod_renderer
+#include IMPORT_MODULE_H
 
 // Close window when Q is pressed
 DECLARE_EVENT_LISTENER(keyPressedListener, (KeyPressedEvent *event) {
@@ -40,7 +42,7 @@ int main(int argc, char **argv)
   imports(game_mod   , (Game, Object, Camera, Scene))
   imports(window_mod , (Window))
   imports(input_mod  , (Input))
-  imports(renderer_mod,(Renderer))
+  imports(renderer_mod, (Renderer))
   IMPORT_EVENTS_evmod_glfw(window_mod);
 
   U32 width = 800;
@@ -48,7 +50,6 @@ int main(int argc, char **argv)
 
   WindowHandle windowHandle = Window->create(width, height, "Main Window");
   Input->setActiveWindow(windowHandle);
-  Renderer->setWindow(windowHandle);
 
   ACTIVATE_EVENT_LISTENER(keyPressedListener, KeyPressedEvent);
   evstring project_dir = NULL;
@@ -124,6 +125,8 @@ int main(int argc, char **argv)
   evstring_free(project_dir);
 
   rmt_SetCurrentThreadName("Main Thread");
+
+  Renderer->setWindow(windowHandle);
 
   U32 result = 0;
   while(result == 0) {
