@@ -24,6 +24,7 @@ subproject('evmod_ecs')
 subproject('evmod_physics')
 subproject('evmod_script')
 subproject('evmod_assets')
+subproject('evmod_renderer')
 subproject('evmod_game')
 
 evmodglfw_dep = dependency('evmod_glfw')
@@ -31,6 +32,7 @@ evmodecs_dep = dependency('evmod_ecs')
 evmodphysics_dep = dependency('evmod_physics')
 evmodscript_dep = dependency('evmod_script')
 evmodgame_dep = dependency('evmod_game')
+evmodrenderer_dep = dependency('evmod_renderer')
 evmod_assets_dep = dependency('evmod_assets')
 
 # Setup build directory
@@ -47,6 +49,7 @@ sandbox_exe = executable(
     evmodphysics_dep,
     evmodscript_dep,
     evmodgame_dep,
+    evmodrenderer_dep,
     evmod_assets_dep,
   ],
   install : true,

@@ -34,12 +34,13 @@ int main(int argc, char **argv)
   evolmodule_t asset_mod   = evol_loadmodule("assetmanager");   DEBUG_ASSERT(asset_mod);
   evolmodule_t window_mod  = evol_loadmodule("window");         DEBUG_ASSERT(window_mod);
   evolmodule_t input_mod   = evol_loadmodule("input");          DEBUG_ASSERT(input_mod);
+  evolmodule_t renderer_mod= evol_loadmodule("renderer");       DEBUG_ASSERT(renderer_mod);
 
   imports(asset_mod  , (AssetManager, Asset, TextLoader, JSONLoader, ShaderLoader))
   imports(game_mod   , (Game, Object, Camera, Scene))
   imports(window_mod , (Window))
   imports(input_mod  , (Input))
-
+  imports(renderer_mod,(Renderer))
   IMPORT_EVENTS_evmod_glfw(window_mod);
 
   U32 width = 800;
@@ -47,6 +48,7 @@ int main(int argc, char **argv)
 
   WindowHandle windowHandle = Window->create(width, height, "Main Window");
   Input->setActiveWindow(windowHandle);
+  Renderer->setWindow(windowHandle);
 
   ACTIVATE_EVENT_LISTENER(keyPressedListener, KeyPressedEvent);
   evstring project_dir = NULL;
@@ -136,7 +138,7 @@ int main(int argc, char **argv)
     ev_ProfileCPU(GameProgress, 0) {
       result |= Game->progress(0.01666667f);
     }
-
+    Renderer->run();
     sleep_ms(17);
   }
 
