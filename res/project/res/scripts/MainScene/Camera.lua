@@ -9,22 +9,24 @@ this.on_update = function()
   local deltaMouseMovement = Input.getDeltaMousePos()
   this.angles.y = this.angles.y - deltaMouseMovement.x * this.mouse_sens
   this.eulerAngles = this.angles
-  print('Camera OnUpdate')
 
   if Input.getKeyJustPressed(Input.KeyCode.Enter) then
     gotoScene('SideScene')
   end
 
+  local pos = this.position
   if Input.getKeyDown(Input.KeyCode.Up) then
-    this.position = this.position + this:getChild('RotationHelper').forward * this.speed
+    pos = pos + this:getChild('RotationHelper').forward * this.speed
   end
   if Input.getKeyDown(Input.KeyCode.Down) then
-    this.position = this.position - this:getChild('RotationHelper').forward * this.speed
+    pos = pos - this:getChild('RotationHelper').forward * this.speed
   end
   if Input.getKeyDown(Input.KeyCode.Right) then
-    this.position = this.position + Vec3:new(1, 0, 0) * this.speed
+    pos = pos + this:getChild('RotationHelper').right * this.speed
   end
   if Input.getKeyDown(Input.KeyCode.Left) then
-    this.position = this.position - Vec3:new(1, 0, 0) * this.speed
+    pos = pos - this:getChild('RotationHelper').right * this.speed
   end
+
+  this.position = pos
 end
