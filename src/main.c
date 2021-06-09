@@ -31,7 +31,7 @@ struct {
   evolmodule_t asset_mod;
   evolmodule_t window_mod;
   evolmodule_t input_mod;
-  /* evolmodule_t renderer_mod; */
+  evolmodule_t renderer_mod;
 
   WindowHandle window;
 
@@ -114,8 +114,11 @@ project_changed_cb()
   }
 
   evstring_free(project_dir);
-  /* Renderer->setWindow((GenericHandle)State.window); */
 
+  evol_unloadmodule(State.renderer_mod);
+  State.renderer_mod = evol_loadmodule("renderer");
+
+  Renderer->setWindow((GenericHandle)State.window);
 }
 
 void
@@ -124,12 +127,12 @@ load_project()
   State.game_mod     = evol_loadmodule("game");           DEBUG_ASSERT(State.game_mod);
   State.window_mod   = evol_loadmodule("window");         DEBUG_ASSERT(State.window_mod);
   State.input_mod    = evol_loadmodule("input");          DEBUG_ASSERT(State.input_mod);
-  /* State.renderer_mod = evol_loadmodule("renderer");       DEBUG_ASSERT(State.renderer_mod); */
+  State.renderer_mod = evol_loadmodule("renderer");       DEBUG_ASSERT(State.renderer_mod);
 
   imports(State.game_mod   , (Game, Object, Camera, Scene))
   imports(State.window_mod , (Window))
   imports(State.input_mod  , (Input))
-  /* imports(State.renderer_mod, (Renderer)) */
+  imports(State.renderer_mod, (Renderer))
   IMPORT_EVENTS_evmod_glfw(State.window_mod);
 
   U32 width = 800;
@@ -211,7 +214,7 @@ load_project()
   }
 
   evstring_free(project_dir);
-  /* Renderer->setWindow((GenericHandle)State.window); */
+  Renderer->setWindow((GenericHandle)State.window);
 
 }
 
@@ -221,7 +224,7 @@ unload_project()
   evol_unloadmodule(State.game_mod);
   evol_unloadmodule(State.input_mod);
   evol_unloadmodule(State.window_mod);
-  /* evol_unloadmodule(State.renderer_mod); */
+  evol_unloadmodule(State.renderer_mod);
 }
 
 int main(int argc, char **argv) 
@@ -257,7 +260,7 @@ int main(int argc, char **argv)
       AssetManager->update();
     }
 
-    /* Renderer->run(); */
+    Renderer->run();
     sleep_ms(17);
   }
 

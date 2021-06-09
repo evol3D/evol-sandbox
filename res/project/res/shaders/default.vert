@@ -35,5 +35,6 @@ void main() {
 	Vertex vertex = ResourceBuffers[ nonuniformEXT(0) ].resources[PositionBuffers[ nonuniformEXT(0) ].resources[gl_VertexIndex] ];
 
   normal = vertex.normal.xyz;
-  gl_Position = vec4(vertex.position.x, vertex.position.y, vertex.position.z, 1.0);
+  float scale = 0.3;
+  gl_Position = vec4(vertex.position.x * scale - 0.1, vertex.position.y * scale - 0.7, (vertex.position.z * scale * -1.0 + 0.9), 1.0);
 }
