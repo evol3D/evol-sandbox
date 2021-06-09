@@ -6,22 +6,59 @@
       "components": [
         {
           "type": "TransformComponent",
-          "position": [0.0, 0.0, 0.0],
+          "position": [0.0, 0.0, 5.0],
           "rotation": [0.0, 0.0, 0.0],
+          "scale": [1.0, 1.0, 1.0]
+        },
+        {
+          "type": "ScriptComponent",
+          "script_name": "MainCameraController",
+          "script_path": "scripts://MainScene/Camera.lua"
+        }
+      ],
+      "children": [
+        {
+          "id": "RotationHelper",
+          "components": [
+            {
+              "type": "TransformComponent",
+              "position": [0.0, 0.0, 0.0],
+              "rotation": [0.0, 0.0, 0.0],
+              "scale": [1.0, 1.0, 1.0]
+            },
+            {
+              "type": "CameraComponent",
+              "view": "Perspective",
+              "fov": 90,
+              "near": 0.001,
+              "far": 1000,
+              "aspectRatio": 1.3333
+            },
+            {
+              "type": "ScriptComponent",
+              "script_name": "MainCameraRotationHelper",
+              "script_path": "scripts://MainScene/CameraHelper.lua"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "SideCamera",
+      "components": [
+        {
+          "type": "TransformComponent",
+          "position": [25.0, 0.0, -15.0],
+          "rotation": [0.0, 90.0, 0.0],
           "scale": [1.0, 1.0, 1.0]
         },
         {
           "type": "CameraComponent",
           "view": "Perspective",
-          "fov": 60,
+          "fov": 90,
           "near": 0.001,
           "far": 1000,
           "aspectRatio": 1.3333
-        },
-        {
-          "type": "ScriptComponent",
-          "script_name": "MainCameraController",
-          "script_path": "scripts://MainScene/camera.lua"
         }
       ]
     },
@@ -30,7 +67,7 @@
       "components": [
         {
           "type": "TransformComponent",
-          "position": [0.0, 10.0, -15.0],
+          "position": [0.0, 0.0, -15.0],
           "rotation": [0.0, 0.0, 0.0],
           "scale": [1.0, 1.0, 1.0]
         },
@@ -47,7 +84,7 @@
         {
           "type": "ScriptComponent",
           "script_name": "MainPlayerController",
-          "script_path": "scripts://MainScene/player.lua"
+          "script_path": "scripts://MainScene/Player.lua"
         }
       ],
       "children": [
@@ -81,33 +118,130 @@
             {
               "type": "ScriptComponent",
               "script_name": "MainChildController",
-              "script_path": "scripts://MainScene/child.lua"
+              "script_path": "scripts://MainScene/Child.lua"
             }
           ]
         }
       ]
     },
     {
-      "id": "Ground",
+      "id": "Map",
       "components": [
         {
           "type": "TransformComponent",
-          "position": [0.0, -15.0, -15.0],
+          "position": [0.0, 0.0, 0.0],
           "rotation": [0.0, 0.0, 0.0],
           "scale": [1.0, 1.0, 1.0]
+        }
+      ],
+      "children": [
+        {
+          "id": "Ground",
+          "components": [
+            {
+              "type": "TransformComponent",
+              "position": [0.0, -5.0, -15.0],
+              "rotation": [0.0, 0.0, 0.0],
+              "scale": [1.0, 1.0, 1.0]
+            },
+            {
+              "type": "RigidbodyComponent",
+              "rigidbodyType": "Static",
+              "mass": 0.0,
+              "restitution": 0.0,
+              "collisionShape": {
+                "type": "Box",
+                "halfExtents": [10.0, 1.0, 10.0]
+              }
+            }
+          ]
         },
         {
-          "type": "RigidbodyComponent",
-          "rigidbodyType": "Static",
-          "mass": 0.0,
-          "restitution": 0.0,
-          "collisionShape": {
-            "type": "Box",
-            "halfExtents": [10.0, 10.0, 10.0]
-          }
+          "id": "Ceiling",
+          "components": [
+            {
+              "type": "TransformComponent",
+              "position": [0.0, 5.0, -15.0],
+              "rotation": [0.0, 0.0, 0.0],
+              "scale": [1.0, 1.0, 1.0]
+            },
+            {
+              "type": "RigidbodyComponent",
+              "rigidbodyType": "Static",
+              "mass": 0.0,
+              "restitution": 0.0,
+              "collisionShape": {
+                "type": "Box",
+                "halfExtents": [10.0, 1.0, 10.0]
+              }
+            }
+          ]
+        },
+        {
+          "id": "WallRight",
+          "components": [
+            {
+              "type": "TransformComponent",
+              "position": [9.0, 0.0, -14.0],
+              "rotation": [0.0, 0.0, 0.0],
+              "scale": [1.0, 1.0, 1.0]
+            },
+            {
+              "type": "RigidbodyComponent",
+              "rigidbodyType": "Static",
+              "mass": 0.0,
+              "restitution": 0.0,
+              "collisionShape": {
+                "type": "Box",
+                "halfExtents": [1.0, 4.0, 9.0]
+              }
+            }
+          ]
+        },
+        {
+          "id": "WallLeft",
+          "components": [
+            {
+              "type": "TransformComponent",
+              "position": [-9.0, 0.0, -14.0],
+              "rotation": [0.0, 0.0, 0.0],
+              "scale": [1.0, 1.0, 1.0]
+            },
+            {
+              "type": "RigidbodyComponent",
+              "rigidbodyType": "Static",
+              "mass": 0.0,
+              "restitution": 0.0,
+              "collisionShape": {
+                "type": "Box",
+                "halfExtents": [1.0, 4.0, 9.0]
+              }
+            }
+          ]
+        },
+        {
+          "id": "WallBack",
+          "components": [
+            {
+              "type": "TransformComponent",
+              "position": [0.0, 0.0, -24.0],
+              "rotation": [0.0, 0.0, 0.0],
+              "scale": [1.0, 1.0, 1.0]
+            },
+            {
+              "type": "RigidbodyComponent",
+              "rigidbodyType": "Static",
+              "mass": 0.0,
+              "restitution": 0.0,
+              "collisionShape": {
+                "type": "Box",
+                "halfExtents": [10.0, 4.0, 1.0]
+              }
+            }
+          ]
         }
       ]
     }
   ],
-  "activeCamera": "Camera"
+  "activeCamera": "Camera.RotationHelper"
 }

@@ -3,12 +3,10 @@ this.on_init = function()
   this.original_position = this.position
   this.angles = Vec3:new()
   this.mouse_sens = 0.01
-  Input.lockCursor()
 end
 
 this.on_update = function()
   local deltaMouseMovement = Input.getDeltaMousePos()
-  this.angles.x = this.angles.x - deltaMouseMovement.y * this.mouse_sens
   this.angles.y = this.angles.y - deltaMouseMovement.x * this.mouse_sens
   this.eulerAngles = this.angles
 end

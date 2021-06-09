@@ -1,5 +1,5 @@
 {
-  "id":"SisyphusoScene",
+  "id":"SideScene",
   "nodes": [
     {
       "id": "Camera",
@@ -21,7 +21,7 @@
         {
           "type": "ScriptComponent",
           "script_name": "SideCameraController",
-          "script_path": "scripts://SideScene/camera.lua"
+          "script_path": "scripts://SideScene/Camera.lua"
         }
       ]
     },
@@ -48,7 +48,7 @@
         {
           "type": "ScriptComponent",
           "script_name": "SidePlayerController",
-          "script_path": "scripts://SideScene/player.lua"
+          "script_path": "scripts://SideScene/Player.lua"
         }
       ],
       "children": [
@@ -74,7 +74,7 @@
             {
               "type": "ScriptComponent",
               "script_name": "SideChildController",
-              "script_path": "scripts://SideScene/child.lua"
+              "script_path": "scripts://SideScene/Child.lua"
             }
           ]
         }
@@ -102,7 +102,7 @@
         {
           "type": "ScriptComponent",
           "script_name": "SideGhostController",
-          "script_path": "scripts://SideScene/ghost.lua"
+          "script_path": "scripts://SideScene/Ghost.lua"
         }
       ]
     },
