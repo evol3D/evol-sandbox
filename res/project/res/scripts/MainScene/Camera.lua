@@ -10,22 +10,32 @@ this.on_update = function()
   this.angles.y = this.angles.y - deltaMouseMovement.x * this.mouse_sens
   this.eulerAngles = this.angles
 
+  helper = this:getChild('RotationHelper')
+
   if Input.getKeyJustPressed(Input.KeyCode.Enter) then
     gotoScene('SideScene')
   end
 
+
   local pos = this.position
   if Input.getKeyDown(Input.KeyCode.Up) then
-    pos = pos + this:getChild('RotationHelper').forward * this.speed
+    pos = pos + helper.forward * this.speed
   end
   if Input.getKeyDown(Input.KeyCode.Down) then
-    pos = pos - this:getChild('RotationHelper').forward * this.speed
+    pos = pos - helper.forward * this.speed
   end
   if Input.getKeyDown(Input.KeyCode.Right) then
-    pos = pos + this:getChild('RotationHelper').right * this.speed
+    pos = pos + helper.right * this.speed
   end
   if Input.getKeyDown(Input.KeyCode.Left) then
-    pos = pos - this:getChild('RotationHelper').right * this.speed
+    pos = pos - helper.right * this.speed
+  end
+
+  if Input.getMouseButtonJustPressed(0) then
+    hit = rayCast(this.worldPosition, helper.forward, 300)
+    if(hit.hasHit) then
+      hit.object.position = hit.object.position + Vec3:new(0, 0, -15)
+    end
   end
 
   this.position = pos
