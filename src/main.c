@@ -181,6 +181,7 @@ load_project()
       evstring_free(path_id);
     }
 
+    Renderer->setWindow((GenericHandle)State.window);
 
     // Loading Scenes
     double scene_count = evjs_get(project_desc.json_data, "scenes.len")->as_num;
@@ -205,17 +206,15 @@ load_project()
   }
 
   evstring_free(project_dir);
-  Renderer->setWindow((GenericHandle)State.window);
-
 }
 
 void
 unload_project()
 {
+  evol_unloadmodule(State.renderer_mod);
   evol_unloadmodule(State.game_mod);
   evol_unloadmodule(State.input_mod);
   evol_unloadmodule(State.window_mod);
-  evol_unloadmodule(State.renderer_mod);
 }
 
 int main(int argc, char **argv) 
