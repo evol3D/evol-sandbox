@@ -13,15 +13,15 @@ struct Material {
 };
 
 struct Mesh {
-  uint indexBufferIndex;
-  uint vertexBufferIndex;
-  uint materialBufferIndex;
+  uint asd;
 };
 
 layout( push_constant ) uniform constants
 {
 	mat4 render_matrix;
-  uint meshIndex;
+  uint indexBufferIndex;
+  uint vertexBufferIndex;
+  uint materialBufferIndex;
 } PushConstants;
 
 layout(set = 0, binding = 0) uniform CameraParam {
@@ -50,13 +50,15 @@ layout(location = 1) out Material material;
 
 void main()
 {
-  Mesh mesh = MeshBuffers[PushConstants.meshIndex].mesh;
-  material  = MaterialBuffers[ mesh.materialBufferIndex ].material;
+  //Mesh mesh = MeshBuffers[PushConstants.meshIndex].mesh;
+  //material  = MaterialBuffers[ mesh.materialBufferIndex ].material;
+  material  = MaterialBuffers[ PushConstants.materialBufferIndex ].material;
 
-  uint index = IndexBuffers[ mesh.indexBufferIndex ].indices[gl_VertexIndex];
-	Vertex vertex = VertexBuffers[ mesh.vertexBufferIndex ].vertices[ index ];
+  uint index = IndexBuffers[ PushConstants.indexBufferIndex ].indices[gl_VertexIndex];
+  //uint index = IndexBuffers[ mesh.indexBufferIndex ].indices[gl_VertexIndex];
+	//Vertex vertex = VertexBuffers[ mesh.vertexBufferIndex ].vertices[ index ];
+  Vertex vertex = VertexBuffers[ PushConstants.vertexBufferIndex ].vertices[ index ];
 
   normal = vertex.normal.xyz;
-  float scale = 0.3;
-  gl_Position = Camera.projection * Camera.view * PushConstants.render_matrix * vec4(vertex.position.x * scale - 0.1, vertex.position.y * scale - 0.7, (vertex.position.z * scale * -1.0 + 0.9), 1.0);
+  gl_Position = Camera.projection * Camera.view * PushConstants.render_matrix * vec4(vertex.position.x, vertex.position.y, vertex.position.z, 1.0);
 }
