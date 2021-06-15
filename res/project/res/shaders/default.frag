@@ -13,7 +13,7 @@ layout(location = 1) in Material material;
 layout(location = 0) out vec4 outColor;
 
 void main() {
-  //float intensity = ((dot(normalize(normal), normalize(directional_light)) +1)/2.0)+0.05;
+  float intensity = ((dot(normalize(normal), normalize(directional_light)) +1)/2.0)+0.05;
 
-  //outColor = vec4(material.baseColor * intensity, 1.0);
+  outColor = vec4(material.baseColor * intensity, 1.0);
 }

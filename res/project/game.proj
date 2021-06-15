@@ -33,5 +33,5 @@
       "path": "scenes://TestScene.evsc"
     },
   ],
-  "activeScene": "MainScene"
+  "activeScene": "TestScene"
 }

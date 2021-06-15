@@ -98,7 +98,7 @@
           "type": "ScriptComponent",
           "script_name": "MainPlayerController",
           "script_path": "scripts://TestScene/Player.lua"
-        }
+        },
       ]
     },
     {
@@ -119,6 +119,11 @@
             "type": "Sphere",
             "radius": 1.0
           }
+        },
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "GreenMaterial"
         }
       ]
     },
@@ -140,12 +145,22 @@
             "type": "Sphere",
             "radius": 1.0
           }
+        },
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "GreenMaterial"
         }
       ]
     },
     {
       "id": "Ball3",
       "components": [
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "GreenMaterial"
+        },
         {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
@@ -168,6 +183,11 @@
       "id": "Ball4",
       "components": [
         {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "GreenMaterial"
+        },
+        {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
           "rotation": [0.0, 0.0, 0.0],
@@ -188,6 +208,11 @@
     {
       "id": "Ball5",
       "components": [
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "GreenMaterial"
+        },
         {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
@@ -210,6 +235,11 @@
       "id": "Ball6",
       "components": [
         {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "GreenMaterial"
+        },
+        {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
           "rotation": [0.0, 0.0, 0.0],
@@ -230,6 +260,11 @@
     {
       "id": "Ball7",
       "components": [
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "GreenMaterial"
+        },
         {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
@@ -252,6 +287,11 @@
       "id": "Ball9",
       "components": [
         {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "GreenMaterial"
+        },
+        {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
           "rotation": [0.0, 0.0, 0.0],
@@ -272,6 +312,11 @@
     {
       "id": "Ball10",
       "components": [
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "GreenMaterial"
+        },
         {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
@@ -294,6 +339,11 @@
       "id": "Ball11",
       "components": [
         {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "GreenMaterial"
+        },
+        {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
           "rotation": [0.0, 0.0, 0.0],
@@ -314,6 +364,11 @@
     {
       "id": "Ball12",
       "components": [
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "GreenMaterial"
+        },
         {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
@@ -336,6 +391,11 @@
       "id": "Ball13",
       "components": [
         {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "GreenMaterial"
+        },
+        {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
           "rotation": [0.0, 0.0, 0.0],
@@ -356,6 +416,11 @@
     {
       "id": "Ball14",
       "components": [
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "GreenMaterial"
+        },
         {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
@@ -378,6 +443,11 @@
       "id": "Ball15",
       "components": [
         {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "GreenMaterial"
+        },
+        {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
           "rotation": [0.0, 0.0, 0.0],
@@ -398,6 +468,11 @@
     {
       "id": "Ball16",
       "components": [
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "GreenMaterial"
+        },
         {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
@@ -420,6 +495,11 @@
       "id": "Ball17",
       "components": [
         {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "GreenMaterial"
+        },
+        {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
           "rotation": [0.0, 0.0, 0.0],
@@ -440,6 +520,11 @@
     {
       "id": "Ball18",
       "components": [
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "GreenMaterial"
+        },
         {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
@@ -462,6 +547,11 @@
       "id": "Ball19",
       "components": [
         {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "GreenMaterial"
+        },
+        {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
           "rotation": [0.0, 0.0, 0.0],
@@ -482,6 +572,11 @@
     {
       "id": "Ball21",
       "components": [
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "GreenMaterial"
+        },
         {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
@@ -504,6 +599,11 @@
       "id": "Ball22",
       "components": [
         {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "GreenMaterial"
+        },
+        {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
           "rotation": [0.0, 0.0, 0.0],
@@ -524,6 +624,11 @@
     {
       "id": "Ball23",
       "components": [
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "GreenMaterial"
+        },
         {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
@@ -546,6 +651,11 @@
       "id": "Ball24",
       "components": [
         {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
+        {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
           "rotation": [0.0, 0.0, 0.0],
@@ -566,6 +676,11 @@
     {
       "id": "Ball25",
       "components": [
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
         {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
@@ -588,6 +703,11 @@
       "id": "Ball26",
       "components": [
         {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
+        {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
           "rotation": [0.0, 0.0, 0.0],
@@ -608,6 +728,11 @@
     {
       "id": "Ball27",
       "components": [
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
         {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
@@ -630,6 +755,11 @@
       "id": "Ball28",
       "components": [
         {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
+        {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
           "rotation": [0.0, 0.0, 0.0],
@@ -650,6 +780,11 @@
     {
       "id": "Ball29",
       "components": [
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
         {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
@@ -672,6 +807,11 @@
       "id": "Ball30",
       "components": [
         {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
+        {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
           "rotation": [0.0, 0.0, 0.0],
@@ -692,6 +832,11 @@
     {
       "id": "Ball31",
       "components": [
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
         {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
@@ -714,6 +859,11 @@
       "id": "Ball32",
       "components": [
         {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
+        {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
           "rotation": [0.0, 0.0, 0.0],
@@ -734,6 +884,11 @@
     {
       "id": "Ball33",
       "components": [
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
         {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
@@ -756,6 +911,11 @@
       "id": "Ball34",
       "components": [
         {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
+        {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
           "rotation": [0.0, 0.0, 0.0],
@@ -776,6 +936,11 @@
     {
       "id": "Ball35",
       "components": [
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
         {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
@@ -798,6 +963,11 @@
       "id": "Ball36",
       "components": [
         {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
+        {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
           "rotation": [0.0, 0.0, 0.0],
@@ -818,6 +988,11 @@
     {
       "id": "Ball37",
       "components": [
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
         {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
@@ -840,6 +1015,11 @@
       "id": "Ball38",
       "components": [
         {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
+        {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
           "rotation": [0.0, 0.0, 0.0],
@@ -860,6 +1040,11 @@
     {
       "id": "Ball39",
       "components": [
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
         {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
@@ -882,6 +1067,11 @@
       "id": "Ball40",
       "components": [
         {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
+        {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
           "rotation": [0.0, 0.0, 0.0],
@@ -902,6 +1092,11 @@
     {
       "id": "Ball41",
       "components": [
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
         {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
@@ -924,6 +1119,11 @@
       "id": "Ball42",
       "components": [
         {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
+        {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
           "rotation": [0.0, 0.0, 0.0],
@@ -944,6 +1144,11 @@
     {
       "id": "Ball43",
       "components": [
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
         {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
@@ -966,6 +1171,11 @@
       "id": "Ball44",
       "components": [
         {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
+        {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
           "rotation": [0.0, 0.0, 0.0],
@@ -986,6 +1196,11 @@
     {
       "id": "Ball45",
       "components": [
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
         {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
@@ -1008,6 +1223,11 @@
       "id": "Ball46",
       "components": [
         {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
+        {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
           "rotation": [0.0, 0.0, 0.0],
@@ -1028,6 +1248,11 @@
     {
       "id": "Ball47",
       "components": [
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
         {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
@@ -1050,6 +1275,11 @@
       "id": "Ball48",
       "components": [
         {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
+        {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
           "rotation": [0.0, 0.0, 0.0],
@@ -1070,6 +1300,11 @@
     {
       "id": "Ball49",
       "components": [
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
         {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
@@ -1092,6 +1327,11 @@
       "id": "Ball50",
       "components": [
         {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
+        {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
           "rotation": [0.0, 0.0, 0.0],
@@ -1112,6 +1352,11 @@
     {
       "id": "Ball51",
       "components": [
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
         {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
@@ -1134,6 +1379,11 @@
       "id": "Ball52",
       "components": [
         {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
+        {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
           "rotation": [0.0, 0.0, 0.0],
@@ -1154,6 +1404,11 @@
     {
       "id": "Ball53",
       "components": [
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
         {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
@@ -1176,6 +1431,11 @@
       "id": "Ball54",
       "components": [
         {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
+        {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
           "rotation": [0.0, 0.0, 0.0],
@@ -1196,6 +1456,11 @@
     {
       "id": "Ball55",
       "components": [
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
         {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
@@ -1218,6 +1483,11 @@
       "id": "Ball56",
       "components": [
         {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
+        {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
           "rotation": [0.0, 0.0, 0.0],
@@ -1238,6 +1508,11 @@
     {
       "id": "Ball57",
       "components": [
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
         {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
@@ -1260,6 +1535,11 @@
       "id": "Ball58",
       "components": [
         {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
+        {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
           "rotation": [0.0, 0.0, 0.0],
@@ -1280,6 +1560,11 @@
     {
       "id": "Ball59",
       "components": [
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
         {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
@@ -1302,6 +1587,11 @@
       "id": "Ball60",
       "components": [
         {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
+        {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],
           "rotation": [0.0, 0.0, 0.0],
@@ -1322,6 +1612,11 @@
     {
       "id": "Ball61",
       "components": [
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
+        },
         {
           "type": "TransformComponent",
           "position": [0.0, 10.0, -15.0],

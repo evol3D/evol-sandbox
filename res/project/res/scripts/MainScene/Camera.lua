@@ -15,6 +15,9 @@ this.on_update = function()
   if Input.getKeyJustPressed(Input.KeyCode.Enter) then
     gotoScene('SideScene')
   end
+  if Input.getKeyJustPressed(Input.KeyCode.T) then
+    gotoScene('TestScene')
+  end
 
 
   local pos = this.position

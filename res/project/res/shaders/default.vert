@@ -42,23 +42,19 @@ layout(set = 1, binding = 2) buffer IndexBuffer {
 } IndexBuffers[];
 
 layout(set = 1, binding = 3) buffer MaterialBuffer {
-  layout(align = 16) Material material;
-} MaterialBuffers[];
+  layout(align = 16) Material materials[];
+} MaterialBuffers;
 
 layout(location = 0) out vec3 normal;
 layout(location = 1) out Material material;
 
 void main()
 {
-  //Mesh mesh = MeshBuffers[PushConstants.meshIndex].mesh;
-  //material  = MaterialBuffers[ mesh.materialBufferIndex ].material;
-  material  = MaterialBuffers[ PushConstants.materialBufferIndex ].material;
+  material  = MaterialBuffers.materials[ PushConstants.materialBufferIndex ];
 
   uint index = IndexBuffers[ PushConstants.indexBufferIndex ].indices[gl_VertexIndex];
-  //uint index = IndexBuffers[ mesh.indexBufferIndex ].indices[gl_VertexIndex];
-	//Vertex vertex = VertexBuffers[ mesh.vertexBufferIndex ].vertices[ index ];
   Vertex vertex = VertexBuffers[ PushConstants.vertexBufferIndex ].vertices[ index ];
 
   normal = vertex.normal.xyz;
-  gl_Position = Camera.projection * Camera.view * PushConstants.render_matrix * vec4(vertex.position.x, vertex.position.y, vertex.position.z, 1.0);
+  gl_Position = Camera.projection * Camera.view * PushConstants.render_matrix * vec4(vertex.position.xyz, 1.0);
 }

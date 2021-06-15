@@ -41,6 +41,10 @@ void
 project_changed_cb()
 {
   Game->clearScenes();
+    /* evol_unloadmodule(State.renderer_mod); */
+    /* State.renderer_mod = evol_loadmodule("renderer"); */
+    /* Renderer->setWindow((GenericHandle)State.window); */
+
 
   evstring project_dir = NULL;
   EvConfigLoaderResult project_dir_get_res = ev_configloader_get("project_dir", EV_TYPE_NAME(STRING), &project_dir);
@@ -81,7 +85,6 @@ project_changed_cb()
       evstring_free(path_id);
     }
 
-
     // Loading Scenes
     double scene_count = evjs_get(project_desc.json_data, "scenes.len")->as_num;
     for(int i = 0; i < (int)scene_count;i++) {
@@ -106,10 +109,6 @@ project_changed_cb()
 
   evstring_free(project_dir);
 
-  evol_unloadmodule(State.renderer_mod);
-  State.renderer_mod = evol_loadmodule("renderer");
-
-  Renderer->setWindow((GenericHandle)State.window);
 }
 
 void
@@ -172,8 +171,6 @@ load_project()
       evstring_free(mountpoint_id);
       evstring_free(path_id);
     }
-
-    Renderer->setWindow((GenericHandle)State.window);
 
     // Loading Scenes
     double scene_count = evjs_get(project_desc.json_data, "scenes.len")->as_num;

@@ -85,6 +85,11 @@
           "type": "ScriptComponent",
           "script_name": "MainPlayerController",
           "script_path": "scripts://MainScene/Player.lua"
+        },
+        {
+          "type": "RenderComponent",
+          "mesh": "project://Avocado.mesh",
+          "material": "WhiteMaterial"
         }
       ],
       "children": [
@@ -119,6 +124,11 @@
               "type": "ScriptComponent",
               "script_name": "MainChildController",
               "script_path": "scripts://MainScene/Child.lua"
+            },
+            {
+              "type": "RenderComponent",
+              "mesh": "project://Avocado.mesh",
+              "material": "WhiteMaterial"
             }
           ]
         }
@@ -195,6 +205,11 @@
                 "type": "Box",
                 "halfExtents": [1.0, 4.0, 9.0]
               }
+            },
+            {
+              "type": "RenderComponent",
+              "mesh": "project://Avocado.mesh",
+              "material": "WhiteMaterial"
             }
           ]
         },
