@@ -128,5 +128,43 @@
       ]
     }
   ],
+  "materials": [
+    {
+      "id": "GreenMaterial",
+      "pipeline": "DefaultPipeline",
+      "baseColor": [0.0, 1.0, 0.0, 1.0]
+    },
+    {
+      "id": "RedMaterial",
+      "pipeline": "DefaultPipeline",
+      "baseColor": [1.0, 0.0, 0.0, 1.0]
+    },
+    {
+      "id": "BlueMaterial",
+      "pipeline": "DefaultPipeline",
+      "baseColor": [0.0, 0.0, 1.0, 1.0]
+    },
+    {
+      "id": "WhiteMaterial",
+      "pipeline": "DefaultPipeline",
+      "baseColor": [1.0, 1.0, 0.0, 1.0]
+    },
+  ],
+
+  "pipelines": [
+    {
+      "id": "DefaultPipeline",
+      "shaderStages": [
+        {
+          "type": "Vertex",
+          "shaderPath": "shaders://default.vert"
+        },
+        {
+          "type": "Fragment",
+          "shaderPath": "shaders://default.frag"
+        }
+      ]
+    }
+  ],
   "activeCamera": "Camera"
 }
