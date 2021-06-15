@@ -131,6 +131,7 @@ load_project()
 
   State.window = Window->create(width, height, "Main Window");
   Input->setActiveWindow(State.window);
+  Renderer->setWindow((GenericHandle)State.window);
 
   ACTIVATE_EVENT_LISTENER(keyPressedListener, KeyPressedEvent);
   evstring project_dir = NULL;
@@ -144,15 +145,6 @@ load_project()
   evstring project_mountpoint = evstring_new("project");
   AssetManager->mount(&project_dir, &project_mountpoint);
   evstring_free(project_mountpoint);
-
-  AssetHandle shader_asset = Asset->load("project://triangle.vert");
-  ShaderAsset shader_bin = ShaderLoader->loadAsset(shader_asset, EV_SHADERASSETSTAGE_VERTEX, "TriangleVertex", "main", EV_SHADER_BIN);
-  ShaderAsset shader_asm = ShaderLoader->loadAsset(shader_asset, EV_SHADERASSETSTAGE_VERTEX, "TriangleVertex", "main", EV_SHADER_ASM);
-
-  ev_log_debug("Shader Binary: %.*s", shader_bin.len, shader_bin.binary);
-  ev_log_debug("Shader Assembly: %.*s", shader_asm.len, shader_asm.binary);
-
-  Asset->free(shader_asset);
 
   EV_DEFER(
       AssetHandle project_config = Asset->load("project://game.proj"),
