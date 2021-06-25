@@ -1,6 +1,11 @@
 #version 450
 #extension GL_EXT_nonuniform_qualifier : require
 
+struct Material {
+  vec3 baseColor;
+  uint index;
+};
+
 struct Vertex {
   vec4 position;
   vec4 normal;
@@ -8,8 +13,13 @@ struct Vertex {
   vec2 uv[2];
 };
 
-struct Material {
-  vec3 baseColor;
+struct Light {
+  vec3 color;
+  uint intensity;
+};
+
+struct Scene {
+  uint lightsCount;
 };
 
 struct Mesh {
@@ -24,29 +34,32 @@ layout( push_constant ) uniform constants
   uint materialBufferIndex;
 } PushConstants;
 
-layout(set = 0, binding = 0) uniform CameraParam {
+layout(set = 1, binding = 0) uniform CameraParam {
   mat4 projection;
   mat4 view;
 } Camera;
 
-layout(set = 1, binding = 0) buffer MeshBuffer {
+layout(set = 2, binding = 0) buffer MeshBuffer {
   layout(align = 16) Mesh mesh;
 } MeshBuffers[];
 
-layout(set = 1, binding = 1) buffer VertexBuffer {
+layout(set = 2, binding = 1) buffer VertexBuffer {
   layout(align = 16) Vertex vertices[];
 } VertexBuffers[];
 
-layout(set = 1, binding = 2) buffer IndexBuffer {
+layout(set = 2, binding = 2) buffer IndexBuffer {
   uint indices[];
 } IndexBuffers[];
 
-layout(set = 1, binding = 3) buffer MaterialBuffer {
+layout(set = 2, binding = 3) buffer MaterialBuffer {
   layout(align = 16) Material materials[];
 } MaterialBuffers;
 
+layout(set = 2, binding = 4) uniform sampler2D texSampler[];
+
 layout(location = 0) out vec3 normal;
-layout(location = 1) out Material material;
+layout(location = 1) out vec3 color;
+layout(location = 2) out Material material;
 
 void main()
 {
@@ -54,6 +67,8 @@ void main()
 
   uint index = IndexBuffers[ PushConstants.indexBufferIndex ].indices[gl_VertexIndex];
   Vertex vertex = VertexBuffers[ PushConstants.vertexBufferIndex ].vertices[ index ];
+
+  color = texture(texSampler[0],vertex.uv[0]).xyz;
 
   normal = vertex.normal.xyz;
   gl_Position = Camera.projection * Camera.view * PushConstants.render_matrix * vec4(vertex.position.xyz, 1.0);
