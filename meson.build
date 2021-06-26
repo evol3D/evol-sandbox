@@ -35,6 +35,8 @@ evmodgame_dep = dependency('evmod_game')
 evmodrenderer_dep = dependency('evmod_renderer')
 evmod_assets_dep = dependency('evmod_assets')
 
+subproject('project_assets')
+
 # Setup build directory
 subdir('buildscripts')
 

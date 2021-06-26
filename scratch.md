@@ -1,4 +1,0 @@
-- Add cross platform timer
-- Add cross platform sleep function
-- EV_EXPORT/EV_IMPORT events
-- Remotery

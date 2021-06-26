@@ -3,4 +3,4 @@ module_dir = "."
 
 visualize_physics = 1
 
-project_dir = "../res/project"
+project_dir = "../subprojects/project_assets"

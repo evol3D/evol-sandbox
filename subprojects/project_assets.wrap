@@ -1,0 +1,5 @@
+[wrap-git]
+url = https://github.com/j3oss/evol-assets.git
+revision = master
+
+patch_directory = project_assets

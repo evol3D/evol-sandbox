@@ -240,7 +240,7 @@ int main(int argc, char **argv)
     }
 
     Renderer->run();
-    sleep_ms(17);
+    /* sleep_ms(17); */
   }
 
   unload_project();
