@@ -40,51 +40,16 @@ struct {
 void
 project_changed_cb()
 {
-  Game->clearScenes();
-  Renderer->clear();
-    /* evol_unloadmodule(State.renderer_mod); */
-    /* State.renderer_mod = evol_loadmodule("renderer"); */
-    /* Renderer->setWindow((GenericHandle)State.window); */
-
-
-  evstring project_dir = NULL;
-  EvConfigLoaderResult project_dir_get_res = ev_configloader_get("project_dir", EV_TYPE_NAME(STRING), &project_dir);
-  if(project_dir_get_res != EV_CONFIGLOADER_SUCCESS) {
-    ev_log_error("[sandbox] Could not get project_dir from config file. Error: %s", EvConfigLoaderResultStrings[project_dir_get_res]);
-  }
-
-  assert(project_dir);
-
-  evstring project_mountpoint = evstring_new("project");
-  AssetManager->mount(&project_dir, &project_mountpoint);
-  evstring_free(project_mountpoint);
+  evol_unloadmodule(State.renderer_mod);
+  Game->reload();
+  State.renderer_mod = evol_loadmodule("renderer");
+  Renderer->setWindow((GenericHandle)State.window);
 
   EV_DEFER(
       AssetHandle project_config = Asset->load("project://game.proj"),
       Asset->free(project_config))
   {
     JSONAsset project_desc = JSONLoader->loadAsset(project_config);
-
-    // Loading filesystem mounts
-    double mounts_count = evjs_get(project_desc.json_data, "mounts.len")->as_num;
-    for(int i = 0; i < (int)mounts_count;i++) {
-      evstring path_id = evstring_newfmt("mounts[%d].path", i);
-      evstring mountpoint_id = evstring_newfmt("mounts[%d].mountpoint", i);
-
-      evstr_ref path_ref = evjs_get(project_desc.json_data, path_id)->as_str;
-      evstr_ref mountpoint_ref = evjs_get(project_desc.json_data, mountpoint_id)->as_str;
-
-      evstring path = evstring_newfmt("%s/%.*s", project_dir, path_ref.len, path_ref.data + path_ref.offset);
-      evstring mountpoint = evstring_refclone(mountpoint_ref);
-
-      AssetManager->mount(&path, &mountpoint);
-
-      evstring_free(mountpoint);
-      evstring_free(path);
-
-      evstring_free(mountpoint_id);
-      evstring_free(path_id);
-    }
 
     // Loading Scenes
     double scene_count = evjs_get(project_desc.json_data, "scenes.len")->as_num;
@@ -107,9 +72,6 @@ project_changed_cb()
     Game->setActiveScene(Scene->getFromName(activeScene));
     evstring_free(activeScene);
   }
-
-  evstring_free(project_dir);
-
 }
 
 void
@@ -131,7 +93,6 @@ load_project()
 
   State.window = Window->create(width, height, "Main Window");
   Input->setActiveWindow(State.window);
-  Renderer->setWindow((GenericHandle)State.window);
 
   ACTIVATE_EVENT_LISTENER(keyPressedListener, KeyPressedEvent);
   evstring project_dir = NULL;
@@ -172,6 +133,9 @@ load_project()
       evstring_free(mountpoint_id);
       evstring_free(path_id);
     }
+
+    Renderer->setWindow((GenericHandle)State.window);
+
 
     // Loading Scenes
     double scene_count = evjs_get(project_desc.json_data, "scenes.len")->as_num;
@@ -218,7 +182,7 @@ int main(int argc, char **argv)
   load_project();
 
 
-  // AssetManager->watchRecursively("project:/", project_changed_cb);
+  AssetManager->watchRecursively("project:/", project_changed_cb);
 
   rmt_SetCurrentThreadName("Main Thread");
 
