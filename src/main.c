@@ -41,6 +41,7 @@ void
 project_changed_cb()
 {
   Game->clearScenes();
+  Renderer->clear();
     /* evol_unloadmodule(State.renderer_mod); */
     /* State.renderer_mod = evol_loadmodule("renderer"); */
     /* Renderer->setWindow((GenericHandle)State.window); */
@@ -125,8 +126,8 @@ load_project()
   imports(State.renderer_mod, (Renderer))
   IMPORT_EVENTS_evmod_glfw(State.window_mod);
 
-  U32 width = 800;
-  U32 height = 600;
+  U32 width = 1920;
+  U32 height = 1050;
 
   State.window = Window->create(width, height, "Main Window");
   Input->setActiveWindow(State.window);
@@ -216,8 +217,8 @@ int main(int argc, char **argv)
   imports(State.asset_mod  , (AssetManager, Asset, TextLoader, JSONLoader, ShaderLoader))
   load_project();
 
-  AssetManager->watchRecursively("project:/", project_changed_cb);
 
+  // AssetManager->watchRecursively("project:/", project_changed_cb);
 
   rmt_SetCurrentThreadName("Main Thread");
 
