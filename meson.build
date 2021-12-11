@@ -2,7 +2,7 @@ project('evol-sandbox', 'c',
   version : '0.1',
   default_options : [
     'warning_level=3', 
-    'c_std=gnu11',
+    'c_std=c11',
   ],
 )
 
@@ -15,30 +15,32 @@ cc = meson.get_compiler('c')
 compiler_name = cc.get_id()
 if compiler_name == 'gcc'
   sandbox_args += '-fms-extensions'
+  sandbox_args += '-Wall'
+  sandbox_args += '-Werror'
 endif
 
 
 # The subproject's sole purpose is to make sure that the modules build
-subproject('evmod_glfw')
-subproject('evmod_ecs')
-subproject('evmod_physics')
-subproject('evmod_script')
-subproject('evmod_assets')
-subproject('evmod_renderer')
-subproject('evmod_game')
+# subproject('evmod_glfw')
+# subproject('evmod_ecs')
+# subproject('evmod_physics')
+# subproject('evmod_script')
+# subproject('evmod_assets')
+# subproject('evmod_renderer')
+# subproject('evmod_game')
 
-evmodglfw_dep = dependency('evmod_glfw')
-evmodecs_dep = dependency('evmod_ecs')
-evmodphysics_dep = dependency('evmod_physics')
-evmodscript_dep = dependency('evmod_script')
-evmodgame_dep = dependency('evmod_game')
-evmodrenderer_dep = dependency('evmod_renderer')
-evmod_assets_dep = dependency('evmod_assets')
+# evmodglfw_dep = dependency('evmod_glfw')
+# evmodecs_dep = dependency('evmod_ecs')
+# evmodphysics_dep = dependency('evmod_physics')
+# evmodscript_dep = dependency('evmod_script')
+# evmodgame_dep = dependency('evmod_game')
+# evmodrenderer_dep = dependency('evmod_renderer')
+# evmod_assets_dep = dependency('evmod_assets')
 
-subproject('project_assets')
+# subproject('project_assets')
 
 # Setup build directory
-subdir('buildscripts')
+# subdir('buildscripts')
 
 sandbox_exe = executable(
   'sandbox',
@@ -46,15 +48,15 @@ sandbox_exe = executable(
   dependencies: [
     evol_dep,
 
-    evmodglfw_dep,
-    evmodecs_dep,
-    evmodphysics_dep,
-    evmodscript_dep,
-    evmodgame_dep,
-    evmodrenderer_dep,
-    evmod_assets_dep,
+    # evmodglfw_dep,
+    # evmodecs_dep,
+    # evmodphysics_dep,
+    # evmodscript_dep,
+    # evmodgame_dep,
+    # evmodrenderer_dep,
+    # evmod_assets_dep,
   ],
-  install : true,
+  # install : true,
   c_args: sandbox_args,
 )
 
